@@ -1,9 +1,8 @@
 <h1>
-Hello there
+MySQL: Insert into Database
 </h1>
 
 <?php
-
 $servername = "localhost";
 $username = "root";
 $password = "root";
@@ -11,67 +10,25 @@ $password = "root";
 //Establish connection with database
 try{
     $conn = new PDO("mysql:host=$servername;dbname=test_ef5", $username, $password);
-    echo "Connected!";
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    echo "Connected!<br>";
 } catch (PDOException $e){
-    echo "Connection failed. ". $e->getMessage();
+    echo "Connection failed.<br>". $e->getMessage();
 }
 
-$createTableLehrperson = '
-    CREATE TABLE lehrpersonen(
-        id_lehrperson   INT AUTO_INCREMENT,
-        first_name      VARCHAR(100) NOT NULL,
-        last_name       VARCHAR(100) NOT NULL,
-        schulfach       INT NOT NULL
-        PRIMARY KEY(id_lehrperson)
-    );';
+$insert_informatik_to_schulfaecher = $conn->prepare("INSERT INTO schulfaecher (name_schulfach) VALUES ('Informatik');");
+$insert_temperli_to_lehrpersonen = $conn->prepare("INSERT INTO lehrpersonen (first_name, last_name, schulfach) VALUES ('Beat', 'Temperli', 1);");
+$insert_timon_to_lehrpresonen = $conn->prepare("INSERT INTO lehrpersonen (first_name, last_name, schulfach) VALUES ('Timon', 'Ruther', 1);");
 
-$createTableBewertung = "
-    CREATE TABLE bewertungen(
-        id_bewertung        INT AUTO_INCREMENT,
-        value_humor         TINYINT NOT NULL,
-        value_unterricht    TINYINT NOT NULL,
-        value_fachwissen    TINYINT NOT NULL,
-        querbezug           TINYINT NOT NULL,
-        lehrperson          INT NOT NULL,
-        PRIMARY KEY(id_bewertung)
-    );";
-
-$createTableSchulfach = "
-    CREATE TABLE schulfaecher(
-        id_schulfach        INT AUTO_INCREMENT,
-        name_schulfach      VARCHAR(100) NOT NULL,
-        PRIMARY KEY(id_schulfach)
-    );";
-
-// Execute mySQL commands
 try{
-    $conn->exec($createTableLehrperson);
-    $conn->exec($createTableBewertung);
-    $conn->exec($createTableSchulfach);
-    echo "Tables created!";
+    $insert_informatik_to_schulfaecher->execute();
+    $insert_temperli_to_lehrpersonen->execute();
+    $insert_timon_to_lehrpresonen->execute();
+    echo "Data inserted<br>";
 } catch (PDOException $e){
-    echo "The requested action could not be executed. ".$e -> getMessage();
+    echo "Action failed: ". $e->getMessage(). "<br>";
 }
 
+$conn = null;
 
-//Beliebtheit von Lehrpersonen
-//Entities:
-// - Lehrpersonen
-// -- id_lehrperson
-// -- Name: String
-// -- Vornamen: String
-// -- Schulfach: Fremdschlüssel Schulfach
-//
-// - Bewertung
-// -- id_bewertung
-// -- Humor: 1-6
-// -- Unterricht: 1-6
-// -- Pruefungen: 1-6
-// -- Fachwissen: 1-6
-// -- Querbezug: Boolean
-// -- Lehrperson: Fremdschlüssel Lehrperson
-//
-// - Schulfach
-// -- id_schulfach
-// -- Name: String
 ?>
