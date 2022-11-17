@@ -1,5 +1,5 @@
 <h1>
-MySQL: Insert into Database
+MySQL: Do everything
 </h1>
 
 <?php
@@ -21,6 +21,8 @@ $insert_temperli_to_lehrpersonen = $conn->prepare("INSERT INTO lehrpersonen (fir
 $insert_timon_to_lehrpresonen = $conn->prepare("INSERT INTO lehrpersonen (first_name, last_name, schulfach) VALUES ('Timon', 'Ruther', 1);");
 
 try{
+    include "delete.php";
+    include "create.php";
     $insert_informatik_to_schulfaecher->execute();
     $insert_temperli_to_lehrpersonen->execute();
     $insert_timon_to_lehrpresonen->execute();
