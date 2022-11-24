@@ -10,8 +10,8 @@ $password = "root";
 
 //Establish connection with database
 try{
-    $conn = new PDO("mysql:host=$servername;dbname=test_ef5", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $conn_create = new PDO("mysql:host=$servername;dbname=test_ef5", $username, $password);
+    $conn_create->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     echo "Connected!<br>";
 } catch (PDOException $e){
     echo "Connection failed.<br>". $e->getMessage();
@@ -47,17 +47,28 @@ $createTableSchulfach = "
         PRIMARY KEY(id_schulfach)
     );";
 
+$createTableVLS = "
+    CREATE TABLE vls(
+        id_vls_instance        INT AUTO_INCREMENT,
+        id_lehrer           INT NOT NULL,
+        id_schulfach        INT NOT NULL,
+        PRIMARY KEY (id_vls_instance),
+        FOREIGN KEY (id_lehrer) REFERENCES lehrpersonen (id_lehrperson),
+        FOREIGN KEY (id_schulfach) REFERENCES schulfaecher (id_schulfach)
+    );";
+
 // Execute mySQL commands
 try{
-    $conn->exec($createTableSchulfach);
-    $conn->exec($createTableLehrperson);
-    $conn->exec($createTableBewertung);
+    $conn_create->exec($createTableSchulfach);
+    $conn_create->exec($createTableLehrperson);
+    $conn_create->exec($createTableBewertung);
+    $conn_create->exec($createTableVLS);
     echo "Tables created!<br>";
 } catch (PDOException $e){
     echo "The requested action could not be executed.<br>".$e -> getMessage();
 }
 
-$conn = null;
+$conn_create = null;
 
 
 //Beliebtheit von Lehrpersonen
