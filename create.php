@@ -16,7 +16,6 @@ try{
     echo "Connected! Ready to create database!<br>";
 
 } catch (PDOException $e){
-    // If this ever gets printed out I'll have no idea what happened
     echo "Connection failed.<br>". $e->getMessage();
 }
 

@@ -18,7 +18,6 @@ try{
     echo "Connected! Ready to insert data!<br>";
 
 } catch (PDOException $e){
-    // If this ever gets printed out I'll have no idea what happened
     echo "Connection failed.<br>". $e->getMessage();
 }
 
