@@ -13,7 +13,7 @@ try{
     $conn_delete = new PDO("mysql:host=$servername", $username, $password);
     // Print out mySQL errors on the webpage
     $conn_delete -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Connected! Ready to flush database!<br>";
+    echo "Connected! Ready to delete database!<br>";
 
 } catch (PDOException $e){
     // If this ever gets printed out I'll have no idea what happened
