@@ -51,7 +51,7 @@ function create_tables(){
             id_rang             INT AUTO_INCREMENT,
             name_rang           VARCHAR(20),
             abkuerzung_rang     VARCHAR(5),
-            stundenlohn_rang    INT NOT NULL,
+            stundenlohn_rang    FLOAT NOT NULL,
 
             PRIMARY KEY (id_rang)
         );");
@@ -63,9 +63,10 @@ function create_tables(){
         CREATE TABLE IF NOT EXISTS adressen(
             id_adresse      INT AUTO_INCREMENT,
             kanton_adresse  VARCHAR(100),
+            plz_adresse     VARCHAR(5),
             stadt_adresse   VARCHAR(100),
             strasse_adresse VARCHAR(100),
-            nummer_adresse  VARCHAR(100),
+            nummer_adresse  VARCHAR(10),
 
             PRIMARY KEY (id_adresse)
         );");
@@ -74,7 +75,9 @@ function create_tables(){
     $create_vks_command = $conn_create -> prepare("
         CREATE TABLE IF NOT EXISTS vks(
             id_vk           INT AUTO_INCREMENT,
-            alter_vk        TINYINT NOT NULL,
+            vorname_vk      VARCHAR(50),
+            nachname_vk     VARCHAR(50),
+            geburtsdatum_vk DATE NOT NULL,
             email_vk        VARCHAR(100),
             adresse_vk      INT NOT NULL,
             rang_vk         INT NOT NULL,
