@@ -16,7 +16,7 @@ try{
     echo "Connected! Ready to delete database!<br>";
 
 } catch (PDOException $e){
-    echo "Connection failed.<br>". $e->getMessage();
+    echo "Connection failed.<br>". $e -> getMessage();
 }
 
 function delete_database(){

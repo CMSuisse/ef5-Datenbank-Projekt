@@ -16,7 +16,7 @@ try{
     echo "Connected! Ready to create database!<br>";
 
 } catch (PDOException $e){
-    echo "Connection failed.<br>". $e->getMessage();
+    echo "Connection failed.<br>". $e -> getMessage();
 }
 
 function create_database(){

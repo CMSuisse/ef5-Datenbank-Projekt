@@ -18,7 +18,7 @@ try{
     echo "Connected! Ready to insert data!<br>";
 
 } catch (PDOException $e){
-    echo "Connection failed.<br>". $e->getMessage();
+    echo "Connection failed.<br>". $e -> getMessage();
 }
 
 // Store the values to insert into the tables in lists
