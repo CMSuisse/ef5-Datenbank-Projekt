@@ -152,10 +152,8 @@ function insert_values_into_tables(
 
         $replacement_parent_array = [$index_verbindung => $verbindung];
         $verbindung_vk_einsatz_values = array_replace($verbindung_vk_einsatz_values, $replacement_parent_array);
-    }
-
-    // Insert values into verbindung_vk_einsatz table
-    foreach ($verbindung_vk_einsatz_values as $verbindung){
+        
+        // Insert values into verbindung_vk_einsatz_table
         $insert_command = $conn_index -> prepare(
             "INSERT INTO verbindung_vk_einsatz (vk, einsatz, zeit_geleistet, lohn)
             VALUES ($verbindung[0], $verbindung[1], $verbindung[2], $verbindung[3]);"
