@@ -12,7 +12,7 @@ $password = "root";
 try{
     // Try to create the database before connecting
     include "create.php";
-    $conn_index = new PDO("mysql:host=$servername; dbname=database_cyrill_ef5", $username, $password);
+    $conn_index = new PDO("mysql:host = $servername; dbname = database_cyrill_ef5", $username, $password);
     // Print out mySQL errors on the webpage
     $conn_index -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     echo "Connected! Ready to insert data!<br>";
@@ -150,6 +150,8 @@ function insert_values_into_tables(
         $replacement = [3 => $stundenlohn_vk_verbindung * $verbindung[2]];
         $verbindung = array_replace($verbindung, $replacement);
 
+        // The array verbindung_vk_einsatz_values technically will never be needed again, but...
+        // ANYWAYS!!!
         $replacement_parent_array = [$index_verbindung => $verbindung];
         $verbindung_vk_einsatz_values = array_replace($verbindung_vk_einsatz_values, $replacement_parent_array);
         
@@ -180,7 +182,6 @@ try{
     // Print out the mysql error on the webpage
     echo "Data insertion failed with error: ". $e -> getMessage();
 }
-
 
 // Terminate connection with database
 $conn_index = null;

@@ -10,7 +10,9 @@ $password = "root";
 
 // Establish connection with mysql
 try{
-    $conn_create = new PDO("mysql:host=$servername", $username, $password);
+    // The optional "dbname = foo" after the mysql:host argument is left out here 
+    // because the database might not even exist yet
+    $conn_create = new PDO("mysql:host = $servername", $username, $password);
     // Print out mySQL errors on the webpage
     $conn_create -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     echo "Connected! Ready to create database!<br>";
@@ -26,7 +28,7 @@ function create_database(){
     $create_command = $conn_create -> prepare("CREATE DATABASE IF NOT EXISTS database_cyrill_ef5;");
     $create_command -> execute();
 
-    //Change from the mysql database to database_cyrill_ef5
+    // Change to the newly created database
     $switch_to_new_database_command = $conn_create -> prepare("USE database_cyrill_ef5;");
     $switch_to_new_database_command -> execute();
 }
