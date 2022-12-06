@@ -12,7 +12,7 @@ $password = "root";
 try{
     // Try to create the database before connecting
     include "create.php";
-    $conn_index = new PDO("mysql:host = $servername; dbname = database_cyrill_ef5", $username, $password);
+    $conn_index = new PDO("mysql:host=$servername;dbname=database_cyrill_ef5", $username, $password);
     // Print out mySQL errors on the webpage
     $conn_index -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     echo "Connected! Ready to insert data!<br>";
@@ -23,7 +23,7 @@ try{
 
 // Store the values to insert into the tables in lists
 $orte_values = [
-    ["Klöntal Parkplatz Güntlenau", "Glarus", "Glarus"]
+    ["Klöntal Parkplatz Güntlenau", "8750", "Glarus", "Glarus"]
 ];
 
 $raenge_values = [
@@ -41,15 +41,18 @@ $adressen_values = [
     ["Glarus", "8750", "Glarus", "Gemeindehausplatz", "5"]
 ];
 
+// The last two integers are foreign keys referencing the adressen and raenge table respectively
 $vks_values = [
     ["Ben", "Bödecker", "2006-05-09", "ben.boedecker@stud.schulegl.ch", 2, 3],
     ["Cyrill", "Marti", "2007-03-09", "cyrill.marti@stud.schulegl.ch", 1, 2]
 ];
 
+// The last integer is a foreign key referencing adressen
 $auftraggeber_values = [
     ["Gemeinde Glarus", "keine Ahnung", 3]
 ];
 
+// The last two integers are foreign keys referencing the orte and auftraggeber table respectively
 $einsaetze_values = [
     ["Parkdienst Klöntal", "2022-6-18", 1, 1]
 ];
@@ -77,8 +80,8 @@ function insert_values_into_tables(
     // Loop through the orte_values list defined above and insert the values into the table
     foreach ($orte_values as $ort){
         $insert_command = $conn_index -> prepare(
-            "INSERT INTO orte (name_ort, stadt_ort, kanton_ort)
-            VALUES ('$ort[0]', '$ort[1]', '$ort[2]');"
+            "INSERT INTO orte (name_ort, plz_stadt_ort, stadt_ort, kanton_ort)
+            VALUES ('$ort[0]', '$ort[1]', '$ort[2]', '$ort[3]');"
         );
         $insert_command -> execute();
     }
@@ -134,14 +137,14 @@ function insert_values_into_tables(
         $index_verbindung = array_search($verbindung, $verbindung_vk_einsatz_values);
         // First, fetch the id of the rang of the vk in the verbindung
         $fetch_rang_command = $conn_index -> prepare(
-            "SELECT rang_vk FROM vks WHERE id_vk = $verbindung[0];"
+            "SELECT rang_vk FROM database_cyrill_ef5.vks WHERE id_vk = $verbindung[0];"
         );
         $fetch_rang_command -> execute();
         $rang_vk_verbindung = $fetch_rang_command -> fetchColumn();
 
         // Then, fetch the stundenlohn parameter for this rang
         $fetch_stundenlohn_command = $conn_index -> prepare(
-            "SELECT stundenlohn_rang FROM raenge WHERE id_rang = $rang_vk_verbindung;"
+            "SELECT stundenlohn_rang FROM database_cyrill_ef5.raenge WHERE id_rang = $rang_vk_verbindung;"
         );
         $fetch_stundenlohn_command -> execute();
         $stundenlohn_vk_verbindung = $fetch_stundenlohn_command -> fetchColumn();

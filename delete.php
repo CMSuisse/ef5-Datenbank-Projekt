@@ -22,13 +22,12 @@ try{
 function delete_database(){
     global $conn_delete;
     // Prepare the command to delete the database
-    $flush_database_command = $conn_delete -> prepare("
-        DROP DATABASE database_cyrill_ef5;"
+    $delete_database_command = $conn_delete -> prepare("
+        DROP DATABASE IF EXISTS database_cyrill_ef5;"
     );
     // Execute the prepared command
-    $flush_database_command -> execute();
+    $delete_database_command -> execute();
 }
-
 
 try{
     // Try to delete the database

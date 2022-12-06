@@ -39,10 +39,11 @@ function create_tables(){
     // Create table Orte
     $create_orte_command = $conn_create -> prepare("
         CREATE TABLE IF NOT EXISTS orte(
-            id_ort      INT AUTO_INCREMENT,
-            name_ort    VARCHAR(100),
-            stadt_ort   VARCHAR(100),
-            kanton_ort  VARCHAR(100),
+            id_ort          INT AUTO_INCREMENT,
+            name_ort        VARCHAR(100),
+            plz_stadt_ort   VARCHAR(5),
+            stadt_ort       VARCHAR(100),
+            kanton_ort      VARCHAR(100),
 
             PRIMARY KEY (id_ort)
         );");
