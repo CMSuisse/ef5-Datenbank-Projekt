@@ -12,7 +12,7 @@ $password = "root";
 try{
     // The optional "dbname = foo" after the mysql:host argument is left out here 
     // because the database might not even exist yet
-    $conn_create = new PDO("mysql:host = $servername", $username, $password);
+    $conn_create = new PDO("mysql:host=$servername;charset=utf8", $username, $password);
     // Print out mySQL errors on the webpage
     $conn_create -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     echo "Connected! Ready to create database!<br>";

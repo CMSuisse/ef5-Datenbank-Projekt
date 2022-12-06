@@ -12,7 +12,7 @@ $password = "root";
 try{
     // Try to create the database before connecting
     include "create.php";
-    $conn_index = new PDO("mysql:host=$servername;dbname=database_cyrill_ef5", $username, $password);
+    $conn_index = new PDO("mysql:host=$servername;dbname=database_cyrill_ef5;charset=utf8", $username, $password);
     // Print out mySQL errors on the webpage
     $conn_index -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     echo "Connected! Ready to insert data!<br>";
@@ -47,7 +47,7 @@ $vks_values = [
     ["Cyrill", "Marti", "2007-03-09", "cyrill.marti@stud.schulegl.ch", 1, 2]
 ];
 
-// The last integer is a foreign key referencing adressen
+// The last integer is a foreign key referencing the adressen table
 $auftraggeber_values = [
     ["Gemeinde Glarus", "keine Ahnung", 3]
 ];
@@ -79,6 +79,7 @@ function insert_values_into_tables(
     // Start with inserting into the orte table
     // Loop through the orte_values list defined above and insert the values into the table
     foreach ($orte_values as $ort){
+        // Sure, php prepare commands are not sql injetion proof, but for this database this isn't really of concern
         $insert_command = $conn_index -> prepare(
             "INSERT INTO orte (name_ort, plz_stadt_ort, stadt_ort, kanton_ort)
             VALUES ('$ort[0]', '$ort[1]', '$ort[2]', '$ort[3]');"

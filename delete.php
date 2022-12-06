@@ -10,7 +10,7 @@ $password = "root";
 
 // Establish connection with database
 try{
-    $conn_delete = new PDO("mysql:host = $servername", $username, $password);
+    $conn_delete = new PDO("mysql:host=$servername;charset=utf8", $username, $password);
     // Print out mySQL errors on the webpage
     $conn_delete -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     echo "Connected! Ready to delete database!<br>";
