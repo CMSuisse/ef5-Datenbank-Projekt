@@ -2,6 +2,10 @@
     MySQL: Projekt EF Informatik
 </h1>
 
+<html>
+    <body style="background-color:dimgray"></body>
+</html>
+
 <?php
 
 $servername = "localhost";
@@ -10,6 +14,8 @@ $password = "root";
 
 // Establish connection with databse
 try{
+    // Try to delete the database to avoid adding data twice
+    include "delete.php";
     // Try to create the database before connecting
     include "create.php";
     $conn_index = new PDO("mysql:host=$servername;dbname=database_cyrill_ef5;charset=utf8", $username, $password);
@@ -38,13 +44,17 @@ $raenge_values = [
 $adressen_values = [
     ["Glarus", "8750", "Glarus", "Untere Pressistrasse", "9"],
     ["Glarus", "8867", "Niederurnen", "Speerstrasse", "35"],
-    ["Glarus", "8750", "Glarus", "Gemeindehausplatz", "5"]
+    ["Glarus", "8750", "Glarus", "Gemeindehausplatz", "5"],
+    ["Glarus", "8750", "Glarus", "Musterstrasse", "69"],
+    ["Glarus", "8750", "Glarus", "Testgässlein", "42b"]
 ];
 
 // The last two integers are foreign keys referencing the adressen and raenge table respectively
 $vks_values = [
     ["Ben", "Bödecker", "2006-05-09", "ben.boedecker@stud.schulegl.ch", 2, 3],
-    ["Cyrill", "Marti", "2007-03-09", "cyrill.marti@stud.schulegl.ch", 1, 2]
+    ["Cyrill", "Marti", "2007-03-09", "cyrill.marti@stud.schulegl.ch", 1, 2],
+    ["Vlad", "Verkehr", "2005-06-13", "vladverkehr@lol.ch", 4, 2],
+    ["Erik", "Eins", "1999-09-25", "erikeins@lol.ch", 5, 4]
 ];
 
 // The last integer is a foreign key referencing the adressen table
@@ -52,17 +62,23 @@ $auftraggeber_values = [
     ["Gemeinde Glarus", "keine Ahnung", 3]
 ];
 
-// The last two integers are foreign keys referencing the orte and auftraggeber table respectively
+// The last three integers are foreign keys referencing the orte, auftraggeber and vks table respectively
 $einsaetze_values = [
-    ["Parkdienst Klöntal", "2022-6-18", 1, 1]
+    ["Parkdienst Klöntal", "2022-06-18", 1, 1, 4],
+    ["Parkdienst Klöntal", "2022-06-19", 1, 1, 4]
 ];
 
 // Use 0 as a placeholder for lohn
 // It is replaced in the insert_values_into_tables function
 // because it requires other tables to already have values inserted into them
+// The order here is (from index 0 to 3): vk, einsatz, zeit_geleistet, lohn
 $verbindung_vk_einsatz_values = [
     [1, 1, 7.5, 0],
-    [2, 1, 7.5, 0]
+    [2, 1, 7.5, 0],
+    [4, 1, 4, 0],
+    [1, 2, 7, 0],
+    [3, 2, 7, 0],
+    [4, 2, 3, 0]
 ];
 
 function insert_values_into_tables(
@@ -127,10 +143,16 @@ function insert_values_into_tables(
     // Insert values into einsaetze table
     foreach ($einsaetze_values as $einsatz){
         $insert_command = $conn_index -> prepare(
-            "INSERT INTO einsaetze(name_einsatz, datum_einsatz, ort_einsatz, auftraggeber_einsatz)
-            VALUES ('$einsatz[0]', '$einsatz[1]', $einsatz[2], $einsatz[3]);"
+            "INSERT INTO einsaetze(name_einsatz, datum_einsatz, ort_einsatz, auftraggeber_einsatz, einsatzleiter_einsatz)
+            VALUES ('$einsatz[0]', '$einsatz[1]', $einsatz[2], $einsatz[3], '$einsatz[4]');"
         );
         $insert_command -> execute();
+        // Einsatzleiter gets 20CHF for his efforts on top of everything else he might have earned
+        // einsatz[4] is referencing the id of the vk who was Einsatzleiter
+        $add_extra_lohn_einsatzleiter_command = $conn_index -> prepare("
+            UPDATE vks SET lohn_total = lohn_total + 20 WHERE id_vk = '$einsatz[4]';"
+        );
+        $add_extra_lohn_einsatzleiter_command -> execute();
     }
 
     // Calculate lohn
@@ -165,7 +187,16 @@ function insert_values_into_tables(
             VALUES ($verbindung[0], $verbindung[1], $verbindung[2], $verbindung[3]);"
         );
         $insert_command -> execute();
+
+        // Also update the lohn_total value in the vks table
+        $update_lohn_total_command = $conn_index -> prepare(
+            "UPDATE vks SET lohn_total = lohn_total + $verbindung[3] WHERE id_vk = $verbindung[0];"
+        );
+        $update_lohn_total_command -> execute();
     }
+
+    // Loop through einsaetze_values again to add 20CHF to the vk who was Einsatzleiter
+    
 }                                   
 
 // Try to execute the insert_values_into_tables function
@@ -191,3 +222,9 @@ try{
 $conn_index = null;
 
 ?>
+
+<html>
+<h1>Cool links</h1>
+<a href = "http://localhost/us_opt1/index.php" target = "_blank">phpMyAdmin</a>
+<br><a href = "https://github.com/CMSuisse/ef5-Datenbank-Projekt" target = "_blank">GitHub repo</a>
+</html>

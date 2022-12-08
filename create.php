@@ -75,6 +75,8 @@ function create_tables(){
         );");
 
     // Create table VKs
+    // lohn_total has default value 0.0 because it is never set
+    // to a value but rather always updated
     $create_vks_command = $conn_create -> prepare("
         CREATE TABLE IF NOT EXISTS vks(
             id_vk           INT AUTO_INCREMENT,
@@ -84,6 +86,7 @@ function create_tables(){
             email_vk        VARCHAR(100),
             adresse_vk      INT NOT NULL,
             rang_vk         INT NOT NULL,
+            lohn_total      FLOAT DEFAULT 0.0,
 
             PRIMARY KEY (id_vk),
             FOREIGN KEY (adresse_vk) REFERENCES adressen (id_adresse),
@@ -110,10 +113,12 @@ function create_tables(){
             datum_einsatz           DATE NOT NULL,
             ort_einsatz             INT NOT NULL,
             auftraggeber_einsatz    INT NOT NULL,
+            einsatzleiter_einsatz   INT NOT NULL,
 
             PRIMARY KEY (id_einsatz),
             FOREIGN KEY (ort_einsatz) REFERENCES orte (id_ort),
-            FOREIGN KEY (auftraggeber_einsatz) REFERENCES auftraggeber (id_auftraggeber)
+            FOREIGN KEY (auftraggeber_einsatz) REFERENCES auftraggeber (id_auftraggeber),
+            FOREIGN KEY (einsatzleiter_einsatz) REFERENCES vks (id_vk)
         );");
 
     // Create table Verbindung_VK_Einsatz
