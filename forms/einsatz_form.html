@@ -1,0 +1,35 @@
+<html>
+
+    <head>
+        <title>database_cyrill_ef5_formular</title>
+    </head>
+
+    <meta charset="UTF-8">
+
+    <body style="background-color:dimgray">
+
+        <h1>Einsatz hinzufügen</h1>
+
+        <form action = "../insert.php" method = "POST" id = "einsatz_form">
+            <label for = "name_einsatz">Name Einsatz</label>
+            <br><input type = "text" id = "name_einsatz" name = "name_einsatz" required>
+
+            <br><label for = "date_einsatz">Datum Einsatz</label>
+            <br><input type = "date" id = "date_einsatz" name = "date_einsatz" required>
+
+            <br><label for = "auftraggeber_name">Auftraggeber Name</label>
+            <br><input type = "text" id = "auftraggeber_name" name = "auftraggeber_name" required>
+
+            <br><label for = "vorname_el">Vornahme EL</label>
+            <br><input type = "text" id = "vorname_el" name = "vorname_el" required>
+
+            <br><label for = "nachname_el">Nachname EL</label>
+            <br><input type = "text" id = "nachname_el" name = "nachname_el" required>
+
+            <br><label for = "vk_einsatz">VK zu Einsatz hinzufügen</label>
+            <br><input type = "text" id = "vk_einsatz" name = "vk_einsatz">
+
+            <br><input type = "submit" value = "Absenden">
+        </form>
+    </body>
+</html>

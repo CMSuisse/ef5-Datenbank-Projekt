@@ -1,22 +1,54 @@
 <html>
 
     <head>
-        <title>VK hinzufügen</title>
+        <title>database_cyrill_ef5_formular</title>
     </head>
 
-    <body>
+    <meta charset="UTF-8">
 
-        <h1>Formular</h1>
+    <body style="background-color:dimgray">
 
-        <form action = "insert.php" method = "POST">
+        <h1>VK hinzufügen</h1>
+
+        <form action = "../insert.php" method = "POST">
             <label for = "vorname_vk">Vorname VK</label>
-            <br><input type = "text" id = "vorname_vk" name = "vorname_vk">
+            <br><input type = "text" id = "vorname_vk" name = "vorname_vk" required>
 
             <br><label for = "nachname_vk">Nachname VK</label>
-            <br><input type = "text" id = "nachname_vk" name = "nachname_vk">
+            <br><input type = "text" id = "nachname_vk" name = "nachname_vk" required>
 
             <br><label for = "birthdate_vk">Geburtstag VK</label>
-            <br><input type = "date" id = "birthdate_vk" name = "birthdate_vk">
+            <br><input type = "date" id = "birthdate_vk" name = "birthdate_vk" required>
+
+            <br><label for = "email_vk">e-mail VK</label>
+            <br><input type = "email" id = "email_vk" name = "email_vk" required>
+
+            <br><label for = "adresse_kanton_vk">Heimatkanton VK</label>
+            <br><input type = "text" id = "adresse_kanton_vk" name = "adresse_kanton_vk" required>
+
+            <br><label for = "adresse_plz_vk">Heimatort VK PLZ</label>
+            <br><input type = "text" id = "adresse_plz_vk" name = "adresse_plz_vk" required>
+
+            <br><label for = "adresse_ort_vk">Heimatort VK Name</label>
+            <br><input type = "text" id = "adresse_ort_vk" name = "adresse_ort_vk" required>
+
+            <br><label for = "adresse_strasse_vk">Heimatort VK Strasse</label>
+            <br><input type = "text" id = "adresse_strasse_vk" name = "adresse_strasse_vk" required>
+
+            <br><label for = "adresse_hausnummer_vk">Heimatort VK Hausnummer</label>
+            <br><input type = "text" id = "adresse_hausnummer_vk" name = "adresse_hausnummer_vk" required>
+
+            <br><label for = "rang_vk">Rang VK</label>
+            <br><select id = "rang_vk" name = "rang_vk" required>
+                <option value = "Aspirant">Aspirant</option>
+                <option value = "Verkehrskadett">Verkehrskadett</option>
+                <option value = "Gruppenchef">Gruppenchef</option>
+                <option value = "Zugführer">Zugführer</option>
+                <option value = "Einsatzleiter 2">Einsatzleiter 2</option>
+                <option value = "Einsatzleiter 1">Einsatzleiter 1</option>
+            </select>
+
+            <br><input type = "submit" value = "Absenden">
         </form>
     </body>
 </html>
