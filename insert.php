@@ -1,3 +1,3 @@
 <?php 
-// Tbd
+print_r($_POST);
 ?>
