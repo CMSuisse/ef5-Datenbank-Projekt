@@ -43,7 +43,6 @@ function create_tables(){
             name_ort        VARCHAR(100),
             plz_stadt_ort   VARCHAR(5),
             stadt_ort       VARCHAR(100),
-            kanton_ort      VARCHAR(100),
 
             PRIMARY KEY (id_ort)
         );");
@@ -65,7 +64,6 @@ function create_tables(){
     $create_adressen_command = $conn_create -> prepare("
         CREATE TABLE IF NOT EXISTS adressen(
             id_adresse      INT AUTO_INCREMENT,
-            kanton_adresse  VARCHAR(100),
             plz_adresse     VARCHAR(5),
             stadt_adresse   VARCHAR(100),
             strasse_adresse VARCHAR(100),

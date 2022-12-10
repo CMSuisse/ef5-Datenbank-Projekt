@@ -29,7 +29,7 @@ try{
 
 // Store the values to insert into the tables in lists
 $orte_values = [
-    ["Klöntal Parkplatz Güntlenau", "8750", "Glarus", "Glarus"]
+    ["Klöntal Parkplatz Güntlenau", "8750", "Glarus"]
 ];
 
 $raenge_values = [
@@ -42,11 +42,11 @@ $raenge_values = [
 ];
 
 $adressen_values = [
-    ["Glarus", "8750", "Glarus", "Untere Pressistrasse", "9"],
-    ["Glarus", "8867", "Niederurnen", "Speerstrasse", "35"],
-    ["Glarus", "8750", "Glarus", "Gemeindehausplatz", "5"],
-    ["Glarus", "8750", "Glarus", "Musterstrasse", "69"],
-    ["Glarus", "8750", "Glarus", "Testgässlein", "42b"]
+    ["8750", "Glarus", "Untere Pressistrasse", "9"],
+    ["8867", "Niederurnen", "Speerstrasse", "35"],
+    ["8750", "Glarus", "Gemeindehausplatz", "5"],
+    ["8750", "Glarus", "Musterstrasse", "69"],
+    ["8750", "Glarus", "Testgässlein", "42b"]
 ];
 
 // The last two integers are foreign keys referencing the adressen and raenge table respectively
@@ -97,8 +97,8 @@ function insert_values_into_tables(
     foreach ($orte_values as $ort){
         // Sure, php prepare commands are not sql injetion proof, but for this database this isn't really of concern
         $insert_command = $conn_index -> prepare(
-            "INSERT INTO orte (name_ort, plz_stadt_ort, stadt_ort, kanton_ort)
-            VALUES ('$ort[0]', '$ort[1]', '$ort[2]', '$ort[3]');"
+            "INSERT INTO orte (name_ort, plz_stadt_ort, stadt_ort)
+            VALUES ('$ort[0]', '$ort[1]', '$ort[2]');"
         );
         $insert_command -> execute();
     }
@@ -116,8 +116,8 @@ function insert_values_into_tables(
     // Insert values into vks table
     foreach ($adressen_values as $adresse){
         $insert_command = $conn_index -> prepare(
-            "INSERT INTO adressen (kanton_adresse, plz_adresse, stadt_adresse, strasse_adresse, nummer_adresse)
-            VALUES ('$adresse[0]', '$adresse[1]', '$adresse[2]', '$adresse[3]', '$adresse[4]');"
+            "INSERT INTO adressen (plz_adresse, stadt_adresse, strasse_adresse, nummer_adresse)
+            VALUES ('$adresse[0]', '$adresse[1]', '$adresse[2]', '$adresse[3]');"
         );
         $insert_command -> execute();
     }

@@ -10,7 +10,7 @@
 
         <h1>Einsatz hinzufügen</h1>
 
-        <form action = "../insert.php" method = "POST" id = "einsatz_form">
+        <form action = "../insert.php" method = "POST">
 
             <label for = "name_einsatz">Name Einsatz</label>
             <br><input type = "text" id = "name_einsatz" name = "name_einsatz" required>
@@ -20,6 +20,9 @@
 
             <br><label for = "auftraggeber_name">Auftraggeber Name</label>
             <br><input type = "text" id = "auftraggeber_name" name = "auftraggeber_name" required>
+
+            <br><label for = "ort_einsatz_name">Einsatzort Name</label>
+            <br><input type = "text" id = "ort_einsatz_name" name = "ort_einsatz_name" required>
 
             <br><label for = "vorname_el">Vorname EL</label>
             <br><input type = "text" id = "vorname_el" name = "vorname_el" required>
@@ -35,13 +38,13 @@
             <td>1</td>
 
             <td><label for = "vk_vorname_einsatz1">Vorname VK</label></td>
-            <td><input type = "text" id = "vk_vorname_einsatz1" name = "vk_vorname_einsatz1"></td>
+            <td><input type = "text" id = "vk_vorname_einsatz1" name = "vk_vorname_einsatz1" required></td>
 
             <td><label for = "vk_nachname_einsatz1">Nachname VK</label></td>
-            <td><input type = "text" id = "vk_nachname_einsatz1" name = "vk_nachname_einsatz1"></td>
+            <td><input type = "text" id = "vk_nachname_einsatz1" name = "vk_nachname_einsatz1" required></td>
 
             <td><label for = "vk_einsatzstunden_einsatz1">Einsatzstuden VK</label></td>
-            <td><input type = "number" id = "vk_einsatzstunden_einsatz1" name = "vk_einsatzstunden_einsatz1" min = "1" max = "12"></td>
+            <td><input type = "number" id = "vk_einsatzstunden_einsatz1" name = "vk_einsatzstunden_einsatz1" min = "1" max = "12" required></td>
 
             </table>
 

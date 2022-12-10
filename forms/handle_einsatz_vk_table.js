@@ -25,6 +25,7 @@ function addRowToTable()
   el.type = 'text';
   el.name = 'vk_vorname_einsatz' + iteration;
   el.id = 'vk_vorname_einsatz' + iteration;
+  el.required = true;
 
   cellVornameVK.appendChild(el);
 
@@ -41,17 +42,18 @@ function addRowToTable()
   el.type = 'text';
   el.name = 'vk_nachname_einsatz' + iteration;
   el.id = 'vk_nachname_einsatz' + iteration;
+  el.required = true;
 
   cellNachnameVK.appendChild(el);
 
-  // nachname vk cell label
+  // einastzstunden vk cell label
   var cellEInsatzstundenVKLabel = row.insertCell(5);
   var el = document.createElement('label');
   el.for = 'vk_einsatzstunden_einsatz' + iteration;
   cellEInsatzstundenVKLabel.innerHTML = 'Einsatzstunden VK';
   cellEInsatzstundenVKLabel.appendChild(el);
 
-  // nachname vk cell
+  // einastzstunden vk cell
   var cellEInsatzstundenVK = row.insertCell(6);
   var el = document.createElement('input');
   el.type = 'number';
@@ -59,6 +61,7 @@ function addRowToTable()
   el.id = 'vk_einsatzstunden_einsatz' + iteration;
   el.min = '1';
   el.max = '12';
+  el.required = true;
 
   cellEInsatzstundenVK.appendChild(el);
 }
