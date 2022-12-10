@@ -11,6 +11,7 @@
         <h1>Einsatz hinzufügen</h1>
 
         <form action = "../insert.php" method = "POST" id = "einsatz_form">
+
             <label for = "name_einsatz">Name Einsatz</label>
             <br><input type = "text" id = "name_einsatz" name = "name_einsatz" required>
 
@@ -20,16 +21,107 @@
             <br><label for = "auftraggeber_name">Auftraggeber Name</label>
             <br><input type = "text" id = "auftraggeber_name" name = "auftraggeber_name" required>
 
-            <br><label for = "vorname_el">Vornahme EL</label>
+            <br><label for = "vorname_el">Vorname EL</label>
             <br><input type = "text" id = "vorname_el" name = "vorname_el" required>
 
             <br><label for = "nachname_el">Nachname EL</label>
             <br><input type = "text" id = "nachname_el" name = "nachname_el" required>
 
-            <br><label for = "vk_einsatz">VK zu Einsatz hinzufügen</label>
-            <br><input type = "text" id = "vk_einsatz" name = "vk_einsatz">
+            <table border = "1" id = "form_table">
+            <tr>
+                <th colspan = "7">VKs hinzufügen</th>
+            </tr>
+
+            <td>1</td>
+
+            <td><label for = "vk_vorname_einsatz1">Vorname VK</label></td>
+            <td><input type = "text" id = "vk_vorname_einsatz1" name = "vk_vorname_einsatz1"></td>
+
+            <td><label for = "vk_nachname_einsatz1">Nachname VK</label></td>
+            <td><input type = "text" id = "vk_nachname_einsatz1" name = "vk_nachname_einsatz1"></td>
+
+            <td><label for = "vk_einsatzstunden_einsatz1">Einsatzstuden VK</label></td>
+            <td><input type = "number" id = "vk_einsatzstunden_einsatz1" name = "vk_einsatzstunden_einsatz1" min = "1" max = "12"></td>
+
+            </table>
+
+            <br><input type = "button" value = "Zusätzlicher VK hinzufügen" onclick = "addRowToTable();">
+            <input type = "button" value = "Letzte Reihe löschen" onclick = "removeRowFromTable();">
 
             <br><input type = "submit" value = "Absenden">
         </form>
     </body>
 </html>
+
+<script>
+    // Script yoinked from http://www.mredkj.com/tutorials/tableaddrow.html
+    function addRowToTable()
+{
+  var tbl = document.getElementById('form_table');
+  var lastRow = tbl.rows.length;
+  // if there's no header row in the table, then iteration = lastRow + 1
+  var iteration = lastRow;
+  var row = tbl.insertRow(lastRow);
+  
+  // id cell
+  var cellID = row.insertCell(0);
+  var textNode = document.createTextNode(iteration);
+  cellID.appendChild(textNode);
+  
+  // vorname vk cell label
+  var cellVornameVKLabel = row.insertCell(1);
+  var el = document.createElement('label');
+  el.for = 'vk_vorname_einsatz' + iteration;
+  cellVornameVKLabel.innerHTML = 'Vorname VK';
+  cellVornameVKLabel.appendChild(el);
+
+  // vorname vk cell
+  var cellVornameVK = row.insertCell(2);
+  var el = document.createElement('input');
+  el.type = 'text';
+  el.name = 'vk_vorname_einsatz' + iteration;
+  el.id = 'vk_vorname_einsatz' + iteration;
+
+  cellVornameVK.appendChild(el);
+
+  // nachname vk cell label
+  var cellNachnameVKLabel = row.insertCell(3);
+  var el = document.createElement('label');
+  el.for = 'vk_nachname_einsatz' + iteration;
+  cellNachnameVKLabel.innerHTML = 'Nachname VK';
+  cellNachnameVKLabel.appendChild(el);
+
+  // nachname vk cell
+  var cellNachnameVK = row.insertCell(4);
+  var el = document.createElement('input');
+  el.type = 'text';
+  el.name = 'vk_nachname_einsatz' + iteration;
+  el.id = 'vk_nachname_einsatz' + iteration;
+
+  cellNachnameVK.appendChild(el);
+
+  // nachname vk cell label
+  var cellEInsatzstundenVKLabel = row.insertCell(5);
+  var el = document.createElement('label');
+  el.for = 'vk_einsatzstunden_einsatz' + iteration;
+  cellEInsatzstundenVKLabel.innerHTML = 'Einsatzstunden VK';
+  cellEInsatzstundenVKLabel.appendChild(el);
+
+  // nachname vk cell
+  var cellEInsatzstundenVK = row.insertCell(6);
+  var el = document.createElement('input');
+  el.type = 'number';
+  el.name = 'vk_einsatzstunden_einsatz' + iteration;
+  el.id = 'vk_einsatzstunden_einsatz' + iteration;
+  el.min = '1';
+  el.max = '12';
+
+  cellEInsatzstundenVK.appendChild(el);
+}
+function removeRowFromTable()
+{
+  var tbl = document.getElementById('form_table');
+  var lastRow = tbl.rows.length;
+  if (lastRow > 2) tbl.deleteRow(lastRow - 1);
+}
+</script>
