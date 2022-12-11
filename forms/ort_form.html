@@ -1,0 +1,26 @@
+<html>
+
+    <head>
+        <title>database_cyrill_ef5_formular</title>
+    </head>
+
+    <meta charset="UTF-8">
+
+    <body style="background-color:dimgray">
+
+        <h1>Einsatzort hinzufügen</h1>
+
+        <form action = "../insert.php" method = "POST">
+            <label for = "name_ort">Name Einsatzort</label>
+            <br><input type = "text" id = "name_ort" name = "name_ort" required>
+
+            <br><label for = "plz_ort">PLZ Einsatzort</label>
+            <br><input type = "number" id = "plz_ort" name = "plz_ort" min = "1000" max = "9999" required>
+
+            <br><label for = "stadt_ort">Stadt Einsatzort</label>
+            <br><input type = "text" id = "stadt_ort" name = "stadt_ort" required>
+
+            <br><input type = "submit" value = "Absenden">
+        </form>
+    </body>
+</html>

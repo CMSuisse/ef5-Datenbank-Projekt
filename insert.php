@@ -171,14 +171,19 @@ function add_values_vk(){
 function add_values_auftraggeber(){
 }
 
+function add_values_ort(){
+}
+
 try{
     $post_values = extract_post_values();
     // Determine what form was just filled out by the user and then
     // call the appropriate function
-    if (key($_POST) == "name_einsatz") {add_values_einsatz($post_values);}
-    elseif (key($_POST) == "name_auftraggeber") {add_values_auftraggeber();}
-    else {add_values_vk();}
-
+    switch (key($_POST)){
+        case "name_einsatz": add_values_einsatz($post_values); break;
+        case "name_auftraggeber": add_values_auftraggeber(); break;
+        case "vorname_vk": add_values_vk(); break;
+        case "name_ort": add_values_ort(); break;
+    }
     echo "Data inserted successfully!";
 
 }catch (PDOException $e){
