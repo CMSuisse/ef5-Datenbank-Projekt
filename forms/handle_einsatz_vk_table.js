@@ -65,6 +65,7 @@ function addRowToTable()
 
   cellEInsatzstundenVK.appendChild(el);
 }
+
 function removeRowFromTable()
 {
   var tbl = document.getElementById('form_table');

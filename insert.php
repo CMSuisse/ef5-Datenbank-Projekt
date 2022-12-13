@@ -31,6 +31,12 @@ function extract_post_values(){
     return $post_values;
 }
 
+function validate_einsatz_values($post_values){
+    // Check if the values that will be processed in the create_verbindung_vk_einsatz function won't cause an error
+    // This is because if these values throw an error but the values for the einsatz itself won't the einsatz will be created
+    // But the verbindungen table won't be updated
+}
+
 // If the form posted was a einsatz_form the this function gets executed
 function add_values_einsatz($post_values){
     global $conn_insert;
@@ -118,7 +124,8 @@ function create_verbindung_vk_einsatz($post_values, $id_einsatzleiter){
     }
 
     // Quickly add the verbindung for the Einsatzleiter
-    // lohn is set to 20 instead of 0 which is because the einsatzleiter gets a CHF20 on top of everything else for his efforts
+    // lohn is set to 20 instead of 0 which is because the einsatzleiter gets CHF20 on top of everything else for his efforts
+    // There can be an additional verbindung for the hours the EL actually worked
     array_push($verbindung_vk_einsatz_values, [$id_einsatzleiter, 0, $id_einsatz, 20]);
     
     // Calculate lohn and create the verbindung
@@ -176,17 +183,24 @@ function add_values_ort(){
 
 try{
     $post_values = extract_post_values();
-    // Determine what form was just filled out by the user and then
-    // call the appropriate function
+    // Determine what form was just filled out by the user and then call the appropriate function
     switch (key($_POST)){
-        case "name_einsatz": add_values_einsatz($post_values); break;
-        case "name_auftraggeber": add_values_auftraggeber(); break;
-        case "vorname_vk": add_values_vk(); break;
-        case "name_ort": add_values_ort(); break;
+        case "name_einsatz": 
+            add_values_einsatz($post_values); 
+            break;
+        case "name_auftraggeber": 
+            add_values_auftraggeber(); 
+            break;
+        case "vorname_vk": 
+            add_values_vk(); 
+            break;
+        case "name_ort": 
+            add_values_ort(); 
+            break;
     }
     echo "Data inserted successfully!";
 
-}catch (PDOException $e){
+} catch (PDOException $e){
     echo "Data insertion failed with error: ".$e -> getMessage();
 }
 

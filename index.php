@@ -153,9 +153,19 @@ function insert_values_into_tables(
             UPDATE vks SET lohn_total = lohn_total + 20 WHERE id_vk = '$einsatz[4]';"
         );
         $add_extra_lohn_einsatzleiter_command -> execute();
-    }
 
-    // Calculate lohn
+        $select_id_einsatz = $conn_index -> prepare(
+            "SELECT id_einsatz FROM einsaetze WHERE name_einsatz = '$einsatz[0]' AND datum_einsatz = '$einsatz[1]' AND einsatzleiter_einsatz = $einsatz[4];"
+        );
+        $select_id_einsatz -> execute();
+        $id_einsatz = $select_id_einsatz -> fetchColumn();
+        // Quickly add the verbindung for the Einsatzleiter
+        // lohn is set to 20 instead of 0 which is because the einsatzleiter gets CHF20 on top of everything else for his efforts
+        // There can be an additional verbindung for the hours the EL actually worked
+        array_push($verbindung_vk_einsatz_values, [$einsatz[4], $id_einsatz, 0, 20]);
+    }
+    
+    // Calculate lohn and create the verbindung
     foreach ($verbindung_vk_einsatz_values as $verbindung){
         $index_verbindung = array_search($verbindung, $verbindung_vk_einsatz_values);
         // First, fetch the id of the rang of the vk in the verbindung
@@ -173,7 +183,8 @@ function insert_values_into_tables(
         $stundenlohn_vk_verbindung = $fetch_stundenlohn_command -> fetchColumn();
 
         // Then, multiply stundenlohn and zeit_geleistet together and replace the placeholder with the final value
-        $replacement = [3 => $stundenlohn_vk_verbindung * $verbindung[2]];
+        // The + verbindung[3] is to not overwrite the einsatzleiter's lump sum
+        $replacement = [3 => $stundenlohn_vk_verbindung * $verbindung[2] + $verbindung[3]];
         $verbindung = array_replace($verbindung, $replacement);
 
         // The array verbindung_vk_einsatz_values technically will never be needed again, but...
@@ -194,10 +205,7 @@ function insert_values_into_tables(
         );
         $update_lohn_total_command -> execute();
     }
-
-    // Loop through einsaetze_values again to add 20CHF to the vk who was Einsatzleiter
-    
-}                                   
+}                                  
 
 // Try to execute the insert_values_into_tables function
 try{
