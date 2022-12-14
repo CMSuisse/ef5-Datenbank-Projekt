@@ -32,12 +32,44 @@ function extract_post_values(){
 }
 
 function validate_einsatz_values($post_values){
+    global $conn_insert;
     // Check if the values that will be processed in the create_verbindung_vk_einsatz function won't cause an error
-    // This is because if these values throw an error but the values for the einsatz itself won't the einsatz will be created
-    // But the verbindungen table won't be updated
+    // This is because if these values throw an error but the values for the einsatz itself won't, the einsatz will be created but the verbindungen table won't be updated
+    // No need to check for if the values for the einsatz are valid as when they throw an error, neither the einsaetze nor the verbindungen table will be updated
+    print_r($post_values);
+    print_r(count($post_values));
+    // For this, the einsatzleiter and all the vks participating have to be in the database
+    // So, Einsatzleiter values stored at index 4 and 5 as well as additional vk names stored from index 6 on have to exist
+    // First, check if the Einsatzleiter exists in the database
+    // SELECT EXISTS returns a 1 if the entry has been found in the database and a 0 if the entry doesn't exist
+    $check_for_el_command = $conn_insert -> prepare(
+        "SELECT EXISTS (SELECT id_vk FROM vks WHERE vorname_vk = '$post_values[4]' AND nachname_vk = '$post_values[5]');"
+    );
+    $check_for_el_command -> execute();
+    $el_exists = $check_for_el_command -> fetchColumn();
+
+    // If the Einsatzleiter wasn't found in the database print out this message and return 0
+    if ($el_exists == 0){
+        echo "Der angegebene Einsatzleiter konnte nicht in der Datenbank gefunden werden. Überprüfen Sie, ob Sie den Namen richtig eingegeben haben oder fügen Sie ihn als neuer VK hinzu.<br>";
+        return 0;
+    }
+
+    // Then, iterate through the array beginning with index 6 until the end of the array to check the other vks
+    for ($i = 6; $i < count($post_values); $i += 3){
+        // MySQL didn't like it when I entered $i + 1 directly into $post_values[] so now we're all left with this beauty
+        $index_nachname = $i + 1;
+        $check_for_vk_command = $conn_insert -> prepare(
+            "SELECT EXISTS (SELECT id_vk FROM vks WHERE vorname_vk = '$post_values[$i]' AND nachname_vk = '$post_values[$index_nachname]');"
+        );
+        $check_for_vk_command -> execute();
+        $vk_exists = $check_for_vk_command -> fetchColumn();
+
+        // If one of the vks isn't already in the database print out which one and then return 0
+        print_r($vk_exists);
+    }
 }
 
-// If the form posted was a einsatz_form the this function gets executed
+// If the form posted was an einsatz_form then this function gets executed
 function add_values_einsatz($post_values){
     global $conn_insert;
     //print_r($post_values);
@@ -186,7 +218,11 @@ try{
     // Determine what form was just filled out by the user and then call the appropriate function
     switch (key($_POST)){
         case "name_einsatz": 
-            add_values_einsatz($post_values); 
+            $are_values_valid = validate_einsatz_values($post_values);
+            if ($are_values_valid == 1){
+                add_values_einsatz($post_values); 
+            }
+            // Error messages are echoed right in the validate_einsatz_values function so no need for an else here
             break;
         case "name_auftraggeber": 
             add_values_auftraggeber(); 

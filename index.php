@@ -170,14 +170,14 @@ function insert_values_into_tables(
         $index_verbindung = array_search($verbindung, $verbindung_vk_einsatz_values);
         // First, fetch the id of the rang of the vk in the verbindung
         $fetch_rang_command = $conn_index -> prepare(
-            "SELECT rang_vk FROM database_cyrill_ef5.vks WHERE id_vk = $verbindung[0];"
+            "SELECT rang_vk FROM vks WHERE id_vk = $verbindung[0];"
         );
         $fetch_rang_command -> execute();
         $rang_vk_verbindung = $fetch_rang_command -> fetchColumn();
 
         // Then, fetch the stundenlohn parameter for this rang
         $fetch_stundenlohn_command = $conn_index -> prepare(
-            "SELECT stundenlohn_rang FROM database_cyrill_ef5.raenge WHERE id_rang = $rang_vk_verbindung;"
+            "SELECT stundenlohn_rang FROM raenge WHERE id_rang = $rang_vk_verbindung;"
         );
         $fetch_stundenlohn_command -> execute();
         $stundenlohn_vk_verbindung = $fetch_stundenlohn_command -> fetchColumn();
