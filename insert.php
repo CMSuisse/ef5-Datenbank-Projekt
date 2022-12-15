@@ -36,8 +36,6 @@ function validate_einsatz_values($post_values){
     // Check if the values that will be processed in the create_verbindung_vk_einsatz function won't cause an error
     // This is because if these values throw an error but the values for the einsatz itself won't, the einsatz will be created but the verbindungen table won't be updated
     // No need to check for if the values for the einsatz are valid as when they throw an error, neither the einsaetze nor the verbindungen table will be updated
-    print_r($post_values);
-    print_r(count($post_values));
     // For this, the einsatzleiter and all the vks participating have to be in the database
     // So, Einsatzleiter values stored at index 4 and 5 as well as additional vk names stored from index 6 on have to exist
     // First, check if the Einsatzleiter exists in the database
@@ -48,10 +46,10 @@ function validate_einsatz_values($post_values){
     $check_for_el_command -> execute();
     $el_exists = $check_for_el_command -> fetchColumn();
 
-    // If the Einsatzleiter wasn't found in the database print out this message and return 0
+    // If the Einsatzleiter wasn't found in the database print out this message and throw an exception
     if ($el_exists == 0){
-        echo "Der angegebene Einsatzleiter konnte nicht in der Datenbank gefunden werden. Überprüfen Sie, ob Sie den Namen richtig eingegeben haben oder fügen Sie ihn als neuer VK hinzu.<br>";
-        return 0;
+        throw new Exception("Der angegebene Einsatzleiter konnte nicht in der Datenbank gefunden werden. Überprüfen Sie, 
+                            ob Sie den Namen richtig eingegeben haben oder fügen Sie ihn als neuer VK hinzu.<br>");
     }
 
     // Then, iterate through the array beginning with index 6 until the end of the array to check the other vks
@@ -64,8 +62,11 @@ function validate_einsatz_values($post_values){
         $check_for_vk_command -> execute();
         $vk_exists = $check_for_vk_command -> fetchColumn();
 
-        // If one of the vks isn't already in the database print out which one and then return 0
-        print_r($vk_exists);
+        // If one of the vks isn't already in the database print out which one and then throw an exception
+        if ($vk_exists == 0){
+        throw new Exception("Der VK $post_values[$i] $post_values[$index_nachname] wurde nicht in der Datenbank gefunden.
+                            Überprüfen Sie, ob Sie den Namen richtig eingegeben haben oder fügen Sie ihn als neuer VK hinzu.<br>");
+        }
     }
 }
 
@@ -108,6 +109,7 @@ function add_values_einsatz($post_values){
     create_verbindung_vk_einsatz($post_values, $id_einsatzleiter);
 }
 
+// This function gets called by add_values_einsatz
 function create_verbindung_vk_einsatz($post_values, $id_einsatzleiter){
     global $conn_insert;
     // For this, first select the id of the newly created einsatz
@@ -203,14 +205,107 @@ function create_verbindung_vk_einsatz($post_values, $id_einsatzleiter){
 }
 
 // If the form posted was a vk_form then this function gets executed
-function add_values_vk(){
+function add_values_vk($post_values){
+    global $conn_insert;
+    print_r($post_values);
+    // In the vk_form the user entered values for two tables
+    // The adressen table and the vk table
+    // First the adressen table is filled because the vk table needs a foreign key to the adressen table
+    // However, before filling the adressen table first one must ensure that the values the user entered don't already exist
+    // Unfortunately because id_adresse is auto incrementing one can't just do an INSERT IGNORE or ON DUPLICATE KEY UPDATE
+    $check_if_adresse_exists_command = $conn_insert -> prepare(
+        "SELECT EXISTS (SELECT id_adresse FROM adressen WHERE plz_adresse = $post_values[4]
+                                                        AND stadt_adresse = '$post_values[5]'
+                                                        AND strasse_adresse = '$post_values[6]'
+                                                        AND nummer_adresse = '$post_values[7]');"
+    );
+    $check_if_adresse_exists_command -> execute();
+    $adresse_exists = $check_if_adresse_exists_command -> fetchColumn();
+    // If the adresse doesn't already exist add it to the database
+    // If it is already in the database, select its id
+    if ($adresse_exists == 0){
+        $insert_new_adresse_command = $conn_insert -> prepare(
+            "INSERT INTO adressen (plz_adresse, stadt_adresse, strasse_adresse, nummer_adresse)
+            VALUES ($post_values[4], '$post_values[5]', '$post_values[6]', '$post_values[7]');"
+        );
+        $insert_new_adresse_command -> execute();
+    }
+
+    // Then select the id of either the newly created adresse or the adresse that is already in the database
+    $select_id_adresse_command = $conn_insert -> prepare(
+        "SELECT id_adresse FROM adressen WHERE plz_adresse = $post_values[4]
+                                        AND stadt_adresse = '$post_values[5]'
+                                        AND strasse_adresse = '$post_values[6]'
+                                        AND nummer_adresse = '$post_values[7]';"
+    );
+    $select_id_adresse_command -> execute();
+    $id_adresse = $select_id_adresse_command -> fetchColumn();
+    
+    $select_id_rang_command = $conn_insert -> prepare(
+        "SELECT id_rang FROM raenge WHERE name_rang = '$post_values[8]';"
+    );
+    $select_id_rang_command -> execute();
+    $id_rang = $select_id_rang_command -> fetchColumn();
+
+    // After adding the adresse to the adressen table and the id of the vks rang has been fetched, add the vk to the vks table
+    $insert_vk_values_command = $conn_insert -> prepare(
+        "INSERT INTO vks (vorname_vk, nachname_vk, geburtsdatum_vk, email_vk, adresse_vk, rang_vk)
+        VALUES ('$post_values[0]', '$post_values[1]', '$post_values[2]', '$post_values[3]', $id_adresse, $id_rang);"
+    );
+    $insert_vk_values_command -> execute();
 }
 
 // If the form posted was a auftraggeber_form then this function gets executed
-function add_values_auftraggeber(){
+function add_values_auftraggeber($post_values){
+    global $conn_insert;
+    print_r($post_values);
+    // This function writes to two tables:
+    // The adressen table and the auftraggeber table
+    // First, add the new adresse (if it doesn't exist already) and fetch its id analogous to add_values_vk
+    $check_if_adresse_exists_command = $conn_insert -> prepare(
+        "SELECT EXISTS (SELECT id_adresse FROM adressen WHERE plz_adresse = $post_values[2]
+                                                        AND stadt_adresse = '$post_values[3]'
+                                                        AND strasse_adresse = '$post_values[4]'
+                                                        AND nummer_adresse = '$post_values[5]');"
+    );
+    $check_if_adresse_exists_command -> execute();
+    $adresse_exists = $check_if_adresse_exists_command -> fetchColumn();
+    // If the adresse doesn't already exist add it to the database
+    // If it is already in the database, select its id
+    if ($adresse_exists == 0){
+        $insert_new_adresse_command = $conn_insert -> prepare(
+            "INSERT INTO adressen (plz_adresse, stadt_adresse, strasse_adresse, nummer_adresse)
+            VALUES ($post_values[2], '$post_values[3]', '$post_values[4]', '$post_values[5]');"
+        );
+        $insert_new_adresse_command -> execute();
+    }
+
+    // Then select the id of either the newly created adresse or the adresse that is already in the database
+    $select_id_adresse_command = $conn_insert -> prepare(
+        "SELECT id_adresse FROM adressen WHERE plz_adresse = $post_values[2]
+                                        AND stadt_adresse = '$post_values[3]'
+                                        AND strasse_adresse = '$post_values[4]'
+                                        AND nummer_adresse = '$post_values[5]';"
+    );
+    $select_id_adresse_command -> execute();
+    $id_adresse = $select_id_adresse_command -> fetchColumn();
+
+    // After the new adresse has been created and its id fetched add the auftraggeber to the auftraggeber table
+    $insert_auftraggeber_values_command = $conn_insert -> prepare(
+        "INSERT INTO auftraggeber (name_auftraggeber, email_auftraggeber, rechnungsadresse_auftraggeber)
+        VALUES ('$post_values[0]', '$post_values[1]', $id_adresse);"
+    );
+    $insert_auftraggeber_values_command -> execute();
 }
 
-function add_values_ort(){
+function add_values_ort($post_values){
+    global $conn_insert;
+    // This is a really simple function its just a mysql query
+    $insert_ort_values_command = $conn_insert -> prepare(
+        "INSERT INTO orte (name_ort, plz_stadt_ort, stadt_ort)
+        VALUES ('$post_values[0]', $post_values[1], '$post_values[2]');"
+    );
+    $insert_ort_values_command -> execute();
 }
 
 try{
@@ -218,25 +313,25 @@ try{
     // Determine what form was just filled out by the user and then call the appropriate function
     switch (key($_POST)){
         case "name_einsatz": 
-            $are_values_valid = validate_einsatz_values($post_values);
-            if ($are_values_valid == 1){
-                add_values_einsatz($post_values); 
-            }
-            // Error messages are echoed right in the validate_einsatz_values function so no need for an else here
+            validate_einsatz_values($post_values);
+            add_values_einsatz($post_values); 
             break;
         case "name_auftraggeber": 
-            add_values_auftraggeber(); 
+            // No need to validate the values as no foreign keys have to be fetched
+            add_values_auftraggeber($post_values); 
             break;
         case "vorname_vk": 
-            add_values_vk(); 
+            // No need to validate the vk values as no foreign keys have to be fetched
+            add_values_vk($post_values); 
             break;
         case "name_ort": 
-            add_values_ort(); 
+            // Again, no need to validate the values as no foreign keys have to be fetched
+            add_values_ort($post_values); 
             break;
     }
     echo "Data inserted successfully!";
 
-} catch (PDOException $e){
+} catch (Exception $e){
     echo "Data insertion failed with error: ".$e -> getMessage();
 }
 
