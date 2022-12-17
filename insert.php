@@ -33,6 +33,18 @@ function extract_post_values(){
 
 function validate_einsatz_values($post_values){
     global $conn_insert;
+    // First, check if an einsatz with this name and date hasn't been added already
+    $check_if_einsatz_exists_command = $conn_insert -> prepare(
+        "SELECT EXISTS (SELECT id_einsatz FROM einsaetze WHERE name_einsatz = '$post_values[0]' AND datum_einsatz = '$post_values[1]');"
+    );
+    $check_if_einsatz_exists_command -> execute();
+    $einsatz_exists = $check_if_einsatz_exists_command -> fetchColumn();
+
+    // If the einsatz is already in the database throw an exception
+    // If it isn't already in the database continue on with the rest of the function
+    if ($einsatz_exists == 1){
+        throw new Exception("In der Datenbank ist bereits ein Einsatz mit diesem Namen und Datum enthalten.<br>");
+    }
     // Check if the values that will be processed in the create_verbindung_vk_einsatz function won't cause an error
     // This is because if these values throw an error but the values for the einsatz itself won't, the einsatz will be created but the verbindungen table won't be updated
     // No need to check for if the values for the einsatz are valid as when they throw an error, neither the einsaetze nor the verbindungen table will be updated
@@ -67,6 +79,52 @@ function validate_einsatz_values($post_values){
         throw new Exception("Der VK $post_values[$i] $post_values[$index_nachname] wurde nicht in der Datenbank gefunden.
                             Überprüfen Sie, ob Sie den Namen richtig eingegeben haben oder fügen Sie ihn als neuer VK hinzu.<br>");
         }
+    }
+}
+
+function validate_auftraggeber_values($post_values){
+    global $conn_insert;
+    // Just check if the name of the auftraggeber doesn't already exist in the database
+    $check_if_auftraggeber_exists_command = $conn_insert -> prepare(
+        "SELECT EXISTS (SELECT id_auftraggeber FROM auftraggeber WHERE name_auftraggeber = '$post_values[0]');"
+    );
+    $check_if_auftraggeber_exists_command -> execute();
+    $auftraggeber_exists = $check_if_auftraggeber_exists_command -> fetchColumn();
+    
+    // If the auftraggeber does already exist throw an exception
+    if ($auftraggeber_exists == 1){
+        throw new Exception("Dieser Auftraggeber ist bereits in der Datenbank vorhanden.<br>");
+    }
+}
+
+function validate_vk_values($post_values){
+    global $conn_insert;
+    // Just check if the name of the vk doesn't already exist in the database
+    // Sure, two vks with the same name can exist but then one of them is to be entered into the database with a slightly different name (e.g. vk foo bar and vk foo1 bar)
+    $check_if_vk_exists_command = $conn_insert -> prepare(
+        "SELECT EXISTS (SELECT id_vk FROM vks WHERE vorname_vk = '$post_values[0]' AND nachname_vk = '$post_values[1]');"
+    );
+    $check_if_vk_exists_command -> execute();
+    $vk_exists = $check_if_vk_exists_command -> fetchColumn();
+
+    // If a vk with name is already in the database throw an exception
+    if ($vk_exists == 1){
+        throw new Exception("Dieser Verkehrskadett ist bereits in der Datenbank vorhanden.<br>");
+    }
+}
+
+function validate_ort_values($post_values){
+    global $conn_insert;
+    // Just check if the name of the ort doesn't already exist in the database
+    $check_if_ort_exists_command = $conn_insert -> prepare(
+        "SELECT EXISTS (SELECT id_ort FROM orte WHERE name_ort = '$post_values[0]');"
+    );
+    $check_if_ort_exists_command -> execute();
+    $ort_exits = $check_if_ort_exists_command -> fetchColumn();
+
+    // If the ort is already in the database throw an exception
+    if ($ort_exits == 1){
+        throw new Exception("Dieser Einsatzort ist bereits in der Datenbank vorhanden.<br>");
     }
 }
 
@@ -207,7 +265,6 @@ function create_verbindung_vk_einsatz($post_values, $id_einsatzleiter){
 // If the form posted was a vk_form then this function gets executed
 function add_values_vk($post_values){
     global $conn_insert;
-    print_r($post_values);
     // In the vk_form the user entered values for two tables
     // The adressen table and the vk table
     // First the adressen table is filled because the vk table needs a foreign key to the adressen table
@@ -258,7 +315,6 @@ function add_values_vk($post_values){
 // If the form posted was a auftraggeber_form then this function gets executed
 function add_values_auftraggeber($post_values){
     global $conn_insert;
-    print_r($post_values);
     // This function writes to two tables:
     // The adressen table and the auftraggeber table
     // First, add the new adresse (if it doesn't exist already) and fetch its id analogous to add_values_vk
@@ -317,15 +373,18 @@ try{
             add_values_einsatz($post_values); 
             break;
         case "name_auftraggeber": 
-            // No need to validate the values as no foreign keys have to be fetched
+            // The validate functions for the auftraggeber only checks if the auftraggeber doesn't already exist in the database
+            validate_auftraggeber_values($post_values);
             add_values_auftraggeber($post_values); 
             break;
         case "vorname_vk": 
-            // No need to validate the vk values as no foreign keys have to be fetched
+            // Similar to the validate_auftraggeber_values function the validate function only checks if the vk doens't already exist in the database
+            validate_vk_values($post_values);
             add_values_vk($post_values); 
             break;
         case "name_ort": 
-            // Again, no need to validate the values as no foreign keys have to be fetched
+            // Same as validate_vk_values
+            validate_ort_values($post_values);
             add_values_ort($post_values); 
             break;
     }
