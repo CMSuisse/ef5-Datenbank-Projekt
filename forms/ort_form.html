@@ -11,13 +11,13 @@
 
         <form action = "../insert.php" method = "POST">
             <label for = "name_ort">Name Einsatzort</label>
-            <br><input type = "text" id = "name_ort" name = "name_ort" required>
+            <br><input type = "text" id = "name_ort" name = "name_ort" maxlength = "100" required>
 
             <br><label for = "plz_ort">PLZ Einsatzort</label>
             <br><input type = "number" id = "plz_ort" name = "plz_ort" min = "1000" max = "9999" required>
 
             <br><label for = "stadt_ort">Stadt Einsatzort</label>
-            <br><input type = "text" id = "stadt_ort" name = "stadt_ort" required>
+            <br><input type = "text" id = "stadt_ort" name = "stadt_ort" maxlength = "100" required>
 
             <br><input type = "submit" value = "Absenden">
         </form>

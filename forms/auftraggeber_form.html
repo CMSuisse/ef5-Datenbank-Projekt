@@ -11,22 +11,22 @@
 
         <form action = "../insert.php" method = "POST">
             <label for = "name_auftraggeber">Name Auftraggeber</label>
-            <br><input type = "text" id = "name_auftraggeber" name = "name_auftraggeber" required>
+            <br><input type = "text" id = "name_auftraggeber" name = "name_auftraggeber" maxlength = "100" required>
 
             <br><label for = "email_auftraggeber">e-mail Auftraggeber</label>
-            <br><input type = "email" id = "email_auftraggeber" name = "email_auftraggeber" required>
+            <br><input type = "email" id = "email_auftraggeber" name = "email_auftraggeber" maxlength = "100" required>
 
             <br><label for = "adresse_plz_auftraggeber">Heimatort Auftraggeber PLZ</label>
             <br><input type = "number" id = "adresse_plz_auftraggeber" name = "adresse_plz_auftraggeber" min = "1000" max = "9999" required>
 
             <br><label for = "adresse_ort_auftraggeber">Heimatort Auftraggeber Name</label>
-            <br><input type = "text" id = "adresse_ort_auftraggeber" name = "adresse_ort_auftraggeber" required>
+            <br><input type = "text" id = "adresse_ort_auftraggeber" name = "adresse_ort_auftraggeber" maxlength = "100" required>
 
             <br><label for = "adresse_strasse_auftraggeber">Heimatort Auftraggeber Strasse</label>
-            <br><input type = "text" id = "adresse_strasse_auftraggeber" name = "adresse_strasse_auftraggeber" required>
+            <br><input type = "text" id = "adresse_strasse_auftraggeber" name = "adresse_strasse_auftraggeber" maxlength = "100" required>
 
             <br><label for = "adresse_hausnummer_auftraggeber">Heimatort Auftraggeber Hausnummer</label>
-            <br><input type = "text" id = "adresse_hausnummer_auftraggeber" name = "adresse_hausnummer_auftraggeber" required>
+            <br><input type = "text" id = "adresse_hausnummer_auftraggeber" name = "adresse_hausnummer_auftraggeber" maxlength = "10" required>
 
             <br><input type = "submit" value = "Absenden">
         </form>

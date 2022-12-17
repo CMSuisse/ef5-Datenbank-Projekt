@@ -25,6 +25,7 @@ function addRowToTable()
   el.type = 'text';
   el.name = 'vk_vorname_einsatz' + iteration;
   el.id = 'vk_vorname_einsatz' + iteration;
+  el.maxLength = '50';
   el.required = true;
 
   cellVornameVK.appendChild(el);
@@ -42,6 +43,7 @@ function addRowToTable()
   el.type = 'text';
   el.name = 'vk_nachname_einsatz' + iteration;
   el.id = 'vk_nachname_einsatz' + iteration;
+  el.maxLength = '50';
   el.required = true;
 
   cellNachnameVK.appendChild(el);
