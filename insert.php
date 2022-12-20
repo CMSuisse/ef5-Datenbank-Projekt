@@ -32,6 +32,7 @@ function extract_post_values(){
 }
 
 // Here, the default values of the database are defined
+// They are in the same format as a the post_values array after a form has been submitted
 $vk_default_values = [
     ["Cyrill", "Marti", "2007-03-09", "cmarti@gmx.net", "8750", "Glarus", "Untere Pressistrasse", "9", "Verkehrskadett"],
     ["Vlad", "Verkehr", "2007-05-22", "vlad@verkehr.ch", "8750", "Riedern", "Schulhaushoschet", "5", "Aspirant"],
@@ -64,7 +65,7 @@ function validate_einsatz_values($post_values){
     // If the einsatz is already in the database throw an exception
     // If it isn't already in the database continue on with the rest of the function
     if ($einsatz_exists == 1){
-        throw new Exception("In der Datenbank ist bereits ein Einsatz mit diesem Namen und Datum enthalten.<br>");
+        throw new Exception("In der Datenbank ist bereits ein Einsatz mit diesem Namen und Datum enthalten.");
     }
     // Check if the values that will be processed in the create_verbindung_vk_einsatz function won't cause an error
     // This is because if these values throw an error but the values for the einsatz itself won't, the einsatz will be created but the verbindungen table won't be updated
@@ -82,7 +83,7 @@ function validate_einsatz_values($post_values){
     // If the Einsatzleiter wasn't found in the database print out this message and throw an exception
     if ($el_exists == 0){
         throw new Exception("Der angegebene Einsatzleiter konnte nicht in der Datenbank gefunden werden. Überprüfen Sie, 
-                            ob Sie den Namen richtig eingegeben haben oder fügen Sie ihn als neuer VK hinzu.<br>");
+                            ob Sie den Namen richtig eingegeben haben oder fügen Sie ihn als neuer VK hinzu.");
     }
 
     // Then, iterate through the array beginning with index 6 until the end of the array to check the other vks
@@ -98,7 +99,7 @@ function validate_einsatz_values($post_values){
         // If one of the vks isn't already in the database print out which one and then throw an exception
         if ($vk_exists == 0){
         throw new Exception("Der VK $post_values[$i] $post_values[$index_nachname] wurde nicht in der Datenbank gefunden.
-                            Überprüfen Sie, ob Sie den Namen richtig eingegeben haben oder fügen Sie ihn als neuer VK hinzu.<br>");
+                            Überprüfen Sie, ob Sie den Namen richtig eingegeben haben oder fügen Sie ihn als neuer VK hinzu.");
         }
     }
 }
@@ -114,7 +115,7 @@ function validate_auftraggeber_values($post_values){
     
     // If the auftraggeber does already exist throw an exception
     if ($auftraggeber_exists == 1){
-        throw new Exception("Dieser Auftraggeber ist bereits in der Datenbank vorhanden.<br>");
+        throw new Exception("Dieser Auftraggeber ist bereits in der Datenbank vorhanden.");
     }
 }
 
@@ -130,7 +131,7 @@ function validate_vk_values($post_values){
 
     // If a vk with name is already in the database throw an exception
     if ($vk_exists == 1){
-        throw new Exception("Dieser Verkehrskadett ist bereits in der Datenbank vorhanden.<br>");
+        throw new Exception("Der Verkehrskadett $post_values[0] $post_values[1] ist bereits in der Datenbank vorhanden.");
     }
 }
 
@@ -145,7 +146,7 @@ function validate_ort_values($post_values){
 
     // If the ort is already in the database throw an exception
     if ($ort_exits == 1){
-        throw new Exception("Dieser Einsatzort ist bereits in der Datenbank vorhanden.<br>");
+        throw new Exception("Dieser Einsatzort ist bereits in der Datenbank vorhanden.");
     }
 }
 
@@ -292,7 +293,7 @@ function add_values_vk($post_values){
     // However, before filling the adressen table first one must ensure that the values the user entered don't already exist
     // Unfortunately because id_adresse is auto incrementing one can't just do an INSERT IGNORE or ON DUPLICATE KEY UPDATE
     $check_if_adresse_exists_command = $conn_insert -> prepare(
-        "SELECT EXISTS (SELECT id_adresse FROM adressen WHERE plz_adresse = $post_values[4]
+        "SELECT EXISTS (SELECT id_adresse FROM adressen WHERE plz_adresse = '$post_values[4]'
                                                         AND stadt_adresse = '$post_values[5]'
                                                         AND strasse_adresse = '$post_values[6]'
                                                         AND nummer_adresse = '$post_values[7]');"
@@ -386,13 +387,24 @@ function add_values_ort($post_values){
 }
 
 function add_default_values($vk_default_values, $einsatz_default_values, $auftraggeber_default_values, $einsatzort_default_values){
-    add_values_vk($vk_default_values);
-    add_values_einsatz($einsatzort_default_values);
-    add_values_auftraggeber($auftraggeber_default_values);
-    add_values_ort($einsatzort_default_values);
+    // One liners, wooooooooooooo...
+    // Also calling the validate functions to avoid adding the default data twice
+    foreach ($vk_default_values as $vk) {validate_vk_values($vk); add_values_vk($vk);}
+    foreach ($auftraggeber_default_values as $auftraggeber) {validate_auftraggeber_values($auftraggeber); add_values_auftraggeber($auftraggeber);}
+    foreach ($einsatzort_default_values as $einsatzort) {validate_ort_values($einsatzort); add_values_ort($einsatzort);}
+    foreach ($einsatz_default_values as $einsatz) {validate_einsatz_values($einsatz); add_values_einsatz($einsatz);}
+    // ...oooooooooooooo. Ok, I'll stop :-)
 }
 
-try{
+try {
+    // Function is called outside the main try catch clause as an exception thrown during the execution of this function is (hopefully) always "man-made"
+    add_default_values($vk_default_values, $einsatz_default_values, $auftraggeber_default_values, $einsatzort_default_values);
+    echo "Default data inserted successfully!<br>";
+} catch (Exception $e){
+    echo "Data insertion of default values failed with error: ".$e -> getMessage()."<br>";
+}
+
+try {
     $post_values = extract_post_values();
     // Determine what form was just filled out by the user and then call the appropriate function
     switch (key($_POST)){
@@ -416,10 +428,9 @@ try{
             add_values_ort($post_values); 
             break;
     }
-    echo "Data inserted successfully!";
-
+    echo "Data inserted successfully!<br>";
 } catch (Exception $e){
-    echo "Data insertion failed with error: ".$e -> getMessage();
+    echo "Data insertion failed with error: ".$e -> getMessage()."<br>";
 }
 
 // Terminate connection with database
