@@ -31,6 +31,27 @@ function extract_post_values(){
     return $post_values;
 }
 
+// Here, the default values of the database are defined
+$vk_default_values = [
+    ["Cyrill", "Marti", "2007-03-09", "cmarti@gmx.net", "8750", "Glarus", "Untere Pressistrasse", "9", "Verkehrskadett"],
+    ["Vlad", "Verkehr", "2007-05-22", "vlad@verkehr.ch", "8750", "Riedern", "Schulhaushoschet", "5", "Aspirant"],
+    ["Erik", "Eins", "1999-12-24", "erik@eins.ch", "8867", "Niederurnen", "Bödeckerstrasse", "20", "Zugführer"],
+    ["Daniel", "Dürst", "2003-04-12", "daniel@duerst.ch", "8773", "Haslen", "Höslistrasse", "40", "Gruppenchef"]
+];
+
+$auftraggeber_default_values = [
+    ["Gemeinde Glarus", "keine@ahnung.ch", "8750", "Glarus", "Gemeindehausplatz", "5"],
+];
+
+$einsatzort_default_values = [
+    ["Klöntal Parkplatz Güntlenau", "8750", "Glarus"]
+];
+
+$einsatz_default_values = [
+    ["Klöntal Parkdienst", "2022-08-17", "Gemeinde Glarus", "Klöntal Parkplatz Güntlenau", "Erik", "Eins", "Cyrill", "Marti", 5, "Daniel", "Dürst", 5],
+    ["Klöntal Parkdienst", "2022-08-18", "Gemeinde Glarus", "Klöntal Parkplatz Güntlenau", "Erik", "Eins", "Cyrill", "Marti", 5, "Daniel", "Dürst", 5]
+];
+
 function validate_einsatz_values($post_values){
     global $conn_insert;
     // First, check if an einsatz with this name and date hasn't been added already
@@ -362,6 +383,13 @@ function add_values_ort($post_values){
         VALUES ('$post_values[0]', $post_values[1], '$post_values[2]');"
     );
     $insert_ort_values_command -> execute();
+}
+
+function add_default_values($vk_default_values, $einsatz_default_values, $auftraggeber_default_values, $einsatzort_default_values){
+    add_values_vk($vk_default_values);
+    add_values_einsatz($einsatzort_default_values);
+    add_values_auftraggeber($auftraggeber_default_values);
+    add_values_ort($einsatzort_default_values);
 }
 
 try{
