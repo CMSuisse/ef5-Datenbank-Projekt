@@ -396,6 +396,7 @@ function add_default_values($vk_default_values, $einsatz_default_values, $auftra
     // ...oooooooooooooo. Ok, I'll stop :-)
 }
 
+// Currently, this piece of code is run every time a form is submitted but only succesfully inserts values once -> HOW TO EXECUTE ONLY ONCE?
 try {
     // Function is called outside the main try catch clause as an exception thrown during the execution of this function is (hopefully) always "man-made"
     add_default_values($vk_default_values, $einsatz_default_values, $auftraggeber_default_values, $einsatzort_default_values);

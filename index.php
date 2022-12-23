@@ -14,9 +14,8 @@ $password = "root";
 
 // Establish connection with databse
 try{
-    // Try to delete the database to avoid adding data twice
-    include "delete.php";
     // Try to create the database before connecting
+    // If the database already exist there this will not create a second one
     include "create.php";
     $conn_index = new PDO("mysql:host=$servername;dbname=database_cyrill_ef5;charset=utf8", $username, $password);
     // Print out mySQL errors on the webpage
@@ -40,14 +39,22 @@ $raenge_values = [
 function insert_raenge_values($raenge_values) {
     global $conn_index;
     // First, check if there aren't already values in the raenge table
-    // Insert values into raenge table
-    foreach ($raenge_values as $rang){
-        $insert_command = $conn_index -> prepare(
-            "INSERT INTO raenge (name_rang, abkuerzung_rang, stundenlohn_rang)
-            VALUES ('$rang[0]', '$rang[1]', '$rang[2]');"
-        );
-        $insert_command -> execute();
-    }
+    $check_if_raenge_is_filled = $conn_index -> prepare(
+        "SELECT EXISTS (SELECT * FROM raenge);"
+    );
+    $check_if_raenge_is_filled -> execute();
+    $raenge_is_filled = $check_if_raenge_is_filled -> fetchColumn();
+
+    // Insert values into raenge table if there aren't any values in the raenge table
+    if ($raenge_is_filled == 0){
+        foreach ($raenge_values as $rang){
+            $insert_command = $conn_index -> prepare(
+                "INSERT INTO raenge (name_rang, abkuerzung_rang, stundenlohn_rang)
+                VALUES ('$rang[0]', '$rang[1]', '$rang[2]');"
+            );
+            $insert_command -> execute();
+        }
+    }   
 }                                  
 
 // Try to execute the insert_values_into_tables function
