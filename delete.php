@@ -1,23 +1,17 @@
 <h1>
-    MySQL: Delete database
+    MySQL: Datenbank löschen
 </h1>
 
 <?php
+
+include("generic_functions_constants.php");
 
 $servername = "localhost";
 $username = "root";
 $password = "root";
 
 // Establish connection with database
-try{
-    $conn_delete = new PDO("mysql:host=$servername;charset=utf8", $username, $password);
-    // Print out mySQL errors on the webpage
-    $conn_delete -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Connected! Ready to delete database!<br>";
-
-} catch (PDOException $e){
-    echo "Connection failed.<br>". $e -> getMessage();
-}
+$conn_delete = create_connection($servername, $username, $password, "database_cyrill_ef5");
 
 function delete_database(){
     global $conn_delete;
@@ -41,5 +35,15 @@ try{
 
 // Terminate connection with database
 $conn_delete = null;
-
 ?>
+
+<html>
+    <head>
+        <meta charset = "utf-8"/>
+        <title>MySQL Projekt EF Informatik</title>
+    </head>
+
+    <body style = "background-color:dimgray">
+        <input id = "button" type = "submit" name = "back_to_index" value = "Zurück zu index.html" onclick = "location.href = 'index.html'"/>
+    </body>
+</html>
