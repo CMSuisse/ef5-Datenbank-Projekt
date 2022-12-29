@@ -4,14 +4,11 @@
 
 <?php
 
-include("generic_functions_constants.php");
+include("functions_collection.php");
 
 $servername = "localhost";
 $username = "root";
 $password = "root";
-
-// Establish connection with database
-$conn_delete = create_connection($servername, $username, $password, "database_cyrill_ef5");
 
 function delete_database(){
     global $conn_delete;
@@ -24,13 +21,16 @@ function delete_database(){
 }
 
 try{
+    // Establish connection with database
+    $conn_delete = create_connection($servername, $username, $password, "database_cyrill_ef5");
+
     // Try to delete the database
     delete_database();
-    echo "Database deleted!<br>";
+    echo "Datenbank gelöscht!<br>";
 
-} catch (PDOException $e){
+} catch (Exception $e){
     // Print out the error if one occured
-    echo "Deletion failed with error: ". $e -> getMessage();
+    echo "Datenbank konnte nicht gelöscht werden: ". $e -> getMessage();
 }
 
 // Terminate connection with database

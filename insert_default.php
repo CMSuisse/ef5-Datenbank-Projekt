@@ -4,7 +4,7 @@
 
 <?php
 
-include("generic_functions_constants.php");
+include("functions_collection.php");
 
 $servername = "localhost";
 $username = "root";
@@ -48,7 +48,7 @@ try{
     add_default_values($conn_default);
     echo "Defaultwerte wurden hinzugefügt!<br>";
 } catch (Exception $e){
-    echo "Defaultwerte konnten nicht hinzugefügt werden. Error: ".$e -> getMessage()."<br>";
+    echo "Defaultwerte konnten nicht hinzugefügt werden. Message: ".$e -> getMessage()."<br>";
 }
 
 $conn_default = null;

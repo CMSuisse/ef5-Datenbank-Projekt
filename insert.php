@@ -4,14 +4,11 @@
 
 <?php 
 
-include("generic_functions_constants.php");
+include("functions_collection.php");
 
 $servername = "localhost";
 $username = "root";
 $password = "root";
-
-// Establish connection with databse
-$conn_insert = create_connection($servername, $username, $password, "database_cyrill_ef5");
 
 function extract_post_values(){
     $post_values = array();
@@ -22,6 +19,9 @@ function extract_post_values(){
 }
 
 try {
+    // Establish connection with databse
+    $conn_insert = create_connection($servername, $username, $password, "database_cyrill_ef5");
+    
     $post_values = extract_post_values();
     // Determine what form was just filled out by the user and then call the appropriate function
     switch (key($_POST)){
@@ -45,9 +45,9 @@ try {
             add_values_ort($post_values, $conn_insert); 
             break;
     }
-    echo "Data inserted successfully!<br>";
+    echo "Daten wurden erfolgreich hinzugefügt!<br>";
 } catch (Exception $e){
-    echo "Data insertion failed with error: ".$e -> getMessage()."<br>";
+    echo "Daten konnten nicht hinzugefügt werden: ".$e -> getMessage()."<br>";
 }
 
 // Terminate connection with database

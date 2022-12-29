@@ -4,14 +4,21 @@
 
 <?php
 
-include("generic_functions_constants.php");
+include("functions_collection.php");
 
 $servername = "localhost";
 $username = "root";
 $password = "root";
 
-// Establish connection with mysql
-$conn_create = create_connection($servername, $username, $password, NULL);
+// These values will be used by the add_values_raenge function
+$raenge_values = [
+    ["Aspirant", "ASP", 10.0],
+    ["Verkehrskadett", "VK", 10.0],
+    ["Gruppenchef", "GC", 10.5],
+    ["Zugführer", "ZGF", 11.0],
+    ["Einsatzleiter 2", "EL2", 11.5],
+    ["Einsatzleiter 1", "EL1", 12.0]
+];
 
 function create_database(){
     global $conn_create;
@@ -137,18 +144,43 @@ function create_tables(){
     $create_verbindung_vk_einsatz_command -> execute();
 }
 
+// This function adds the raenge values that were defined on line 7 to the database
+// raenge are not a default value as they are constant
+function add_values_raenge($conn, $raenge_values) {
+    // First, check if there aren't already values in the raenge table
+    $check_if_raenge_is_filled = $conn -> prepare(
+        "SELECT EXISTS (SELECT * FROM raenge);"
+    );
+    $check_if_raenge_is_filled -> execute();
+    $raenge_is_filled = $check_if_raenge_is_filled -> fetchColumn();
+
+    // Insert values into raenge table if there aren't any values in the raenge table
+    if ($raenge_is_filled == 0){
+        foreach ($raenge_values as $rang){
+            $insert_command = $conn -> prepare(
+                "INSERT INTO raenge (name_rang, abkuerzung_rang, stundenlohn_rang)
+                VALUES ('$rang[0]', '$rang[1]', '$rang[2]');"
+            );
+            $insert_command -> execute();
+        }
+    }   
+}
+
 try{
+    // Establish connection with the database
+    $conn_create = create_connection($servername, $username, $password, NULL);
+
     // Try to create the database and the tables
     create_database();
-    echo "Database created! Ready to create tables!<br>";
+    echo "Datenbank erstellt!<br>";
     create_tables();
-    echo "Tables created! Ready to insert data!<br>";
-    add_values_raenge($conn_create);
-    echo "Ränge values inserted!<br>";
+    echo "Tabellen erstellt!<br>";
+    add_values_raenge($conn_create, $raenge_values);
+    echo "Werte der Ränge-Tabelle hinzugefügt!<br>";
 
-} catch (PDOException $e){
+} catch (Exception $e){
     // If this fails print out the error message
-    echo "Database creation failed with error: ". $e -> getMessage();
+    echo "Datenbank konnte nicht erstellt werden: ". $e -> getMessage()."<br>";
 }
 
 // Terminate connection with database
