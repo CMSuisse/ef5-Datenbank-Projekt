@@ -1,0 +1,23 @@
+<html>
+
+    <head>
+        <title>database_cyrill_ef5_formular</title>
+        <meta charset="UTF-8">
+    </head>
+
+    <body style="background-color:dimgray">
+
+        <h1>MySQL: Registration</h1>
+
+        <form action = "../login.php" method = "POST">
+            <label for = "username">Benutzername</label>
+            <br><input type = "text" id = "username" name = "username" maxlength = "100" required>
+
+            <br><label for = "password">Passwort</label>
+            <br><input type = "password" id = "password" name = "password" maxlength = "100" required>
+
+            <br><input type = "submit" value = "Absenden">
+            <input id = "button" type = "submit" name = "goto_login" value = "Schon registriert?" onclick = "location.href = 'login_form.html'">
+        </form>
+    </body>
+</html>

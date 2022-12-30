@@ -4,11 +4,8 @@
 
 <?php
 
+session_start();
 include("functions_collection.php");
-
-$servername = "localhost";
-$username = "root";
-$password = "root";
 
 // These values will be used by the add_values_raenge function
 $raenge_values = [
@@ -20,23 +17,19 @@ $raenge_values = [
     ["Einsatzleiter 1", "EL1", 12.0]
 ];
 
-function create_database(){
-    global $conn_create;
-
+function create_database($conn){
     // Create the new database only if it doesn't already exists
-    $create_command = $conn_create -> prepare("CREATE DATABASE IF NOT EXISTS database_cyrill_ef5;");
+    $create_command = $conn -> prepare("CREATE DATABASE IF NOT EXISTS database_cyrill_ef5;");
     $create_command -> execute();
 
     // Change to the newly created database
-    $switch_to_new_database_command = $conn_create -> prepare("USE database_cyrill_ef5;");
+    $switch_to_new_database_command = $conn -> prepare("USE database_cyrill_ef5;");
     $switch_to_new_database_command -> execute();
 }
 
-function create_tables(){
-    global $conn_create;
-
+function create_tables($conn){
     // Create table Orte
-    $create_orte_command = $conn_create -> prepare("
+    $create_orte_command = $conn -> prepare("
         CREATE TABLE IF NOT EXISTS orte(
             id_ort          INT AUTO_INCREMENT,
             name_ort        VARCHAR(100) NOT NULL,
@@ -47,7 +40,7 @@ function create_tables(){
         );");
 
     // Create table Raenge
-    $create_raenge_command = $conn_create -> prepare("
+    $create_raenge_command = $conn -> prepare("
         CREATE TABLE IF NOT EXISTS raenge(
             id_rang             INT AUTO_INCREMENT,
             name_rang           VARCHAR(20) NOT NULL,
@@ -60,7 +53,7 @@ function create_tables(){
     // Create table Adressen
     // Saving nummer_adresse as a VARCHAR(100) allows for house numbers like 4b
     // And no one will ever need to perform arithmetic operations on house nummers anyway
-    $create_adressen_command = $conn_create -> prepare("
+    $create_adressen_command = $conn -> prepare("
         CREATE TABLE IF NOT EXISTS adressen(
             id_adresse      INT AUTO_INCREMENT,
             plz_adresse     VARCHAR(5) NOT NULL,
@@ -74,7 +67,7 @@ function create_tables(){
     // Create table VKs
     // lohn_total has default value 0.0 because it is never set
     // to a value but rather always updated
-    $create_vks_command = $conn_create -> prepare("
+    $create_vks_command = $conn -> prepare("
         CREATE TABLE IF NOT EXISTS vks(
             id_vk           INT AUTO_INCREMENT,
             vorname_vk      VARCHAR(50) NOT NULL,
@@ -91,7 +84,7 @@ function create_tables(){
         );");
 
     // Create table Auftraggeber
-    $create_auftraggeber_command = $conn_create -> prepare("
+    $create_auftraggeber_command = $conn -> prepare("
         CREATE TABLE IF NOT EXISTS auftraggeber(
             id_auftraggeber                 INT AUTO_INCREMENT,
             name_auftraggeber               VARCHAR(100) NOT NULL,
@@ -103,7 +96,7 @@ function create_tables(){
         );");
 
     // Create table Einsaetze
-    $create_einsaetze_command = $conn_create -> prepare("
+    $create_einsaetze_command = $conn -> prepare("
         CREATE TABLE IF NOT EXISTS einsaetze(
             id_einsatz              INT AUTO_INCREMENT,
             name_einsatz            VARCHAR(100) NOT NULL,
@@ -121,7 +114,7 @@ function create_tables(){
     // Create table Verbindung_VK_Einsatz
     // The combination of id_vk and id_einsatz could also serve as a PRIMARY KEY
     // lohn will be automatically calculated with zeit_geleistet and stundenlohn_rang of the vk referenced
-    $create_verbindung_vk_einsatz_command = $conn_create -> prepare("
+    $create_verbindung_vk_einsatz_command = $conn -> prepare("
         CREATE TABLE IF NOT EXISTS verbindung_vk_einsatz(
             id_verbindung   INT AUTO_INCREMENT,
             vk              INT NOT NULL,
@@ -167,13 +160,20 @@ function add_values_raenge($conn, $raenge_values) {
 }
 
 try{
+    // Check if the user is logged in already
+    if (isset($_SESSION["username"]) && isset($_SESSION["password"])){
+        $username = $_SESSION["username"];
+        $password = $_SESSION["password"];
+    } else{
+        throw new Exception("Sie sind noch nicht eingeloggt!<br>");
+    }
     // Establish connection with the database
-    $conn_create = create_connection($servername, $username, $password, NULL);
+    $conn_create = create_connection("localhost", $username, $password, NULL);
 
     // Try to create the database and the tables
-    create_database();
+    create_database($conn_create);
     echo "Datenbank erstellt!<br>";
-    create_tables();
+    create_tables($conn_create);
     echo "Tabellen erstellt!<br>";
     add_values_raenge($conn_create, $raenge_values);
     echo "Werte der Ränge-Tabelle hinzugefügt!<br>";
@@ -194,6 +194,6 @@ $conn_create = null;
     </head>
 
     <body style = "background-color:dimgray">
-        <input id = "button" type = "submit" name = "back_to_index" value = "Zurück zu index.html" onclick = "location.href = 'index.html'"/>
+        <input id = "button" type = "submit" name = "back_to_index" value = "Zurück zu index" onclick = "location.href = 'index.html'">
     </body>
 </html>

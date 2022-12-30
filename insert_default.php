@@ -4,11 +4,9 @@
 
 <?php
 
+session_start();
 include("functions_collection.php");
 
-$servername = "localhost";
-$username = "root";
-$password = "root";
 // Here, the default values of the database are defined
 // They are in the same format as a the post_values array after a form has been submitted
 $vk_default_values = [
@@ -44,11 +42,19 @@ function add_default_values($conn){
 }
 
 try{
-    $conn_default = create_connection($servername, $username, $password, "database_cyrill_ef5");
+    // Check if the user is logged in already
+    if (isset($_SESSION["username"]) && isset($_SESSION["password"])){
+        $username = $_SESSION["username"];
+        $password = $_SESSION["password"];
+    } else{
+        throw new Exception("Sie sind noch nicht eingeloggt!<br>");
+    }
+    // Establish a connection with the database
+    $conn_default = create_connection("localhost", $username, $password, "database_cyrill_ef5");
     add_default_values($conn_default);
     echo "Defaultwerte wurden hinzugefügt!<br>";
 } catch (Exception $e){
-    echo "Defaultwerte konnten nicht hinzugefügt werden. Message: ".$e -> getMessage()."<br>";
+    echo "Defaultwerte konnten nicht hinzugefügt werden: ".$e -> getMessage()."<br>";
 }
 
 $conn_default = null;
@@ -61,6 +67,6 @@ $conn_default = null;
     </head>
 
     <body style = "background-color:dimgray">
-        <input id = "button" type = "submit" name = "back_to_index" value = "Zurück zu index.html" onclick = "location.href = 'index.html'"/>
+        <input id = "button" type = "submit" name = "back_to_index" value = "Zurück zu index" onclick = "location.href = 'index.html'"/>
     </body>
 </html>

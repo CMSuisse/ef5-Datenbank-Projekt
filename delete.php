@@ -4,11 +4,8 @@
 
 <?php
 
+session_start();
 include("functions_collection.php");
-
-$servername = "localhost";
-$username = "root";
-$password = "root";
 
 function delete_database(){
     global $conn_delete;
@@ -21,8 +18,15 @@ function delete_database(){
 }
 
 try{
+    // Check if the user is logged in already
+    if (isset($_SESSION["username"]) && isset($_SESSION["password"])){
+        $username = $_SESSION["username"];
+        $password = $_SESSION["password"];
+    } else{
+        throw new Exception("Sie sind noch nicht eingeloggt!<br>");
+    }
     // Establish connection with database
-    $conn_delete = create_connection($servername, $username, $password, "database_cyrill_ef5");
+    $conn_delete = create_connection("localhost", $username, $password, "database_cyrill_ef5");
 
     // Try to delete the database
     delete_database();
@@ -44,6 +48,6 @@ $conn_delete = null;
     </head>
 
     <body style = "background-color:dimgray">
-        <input id = "button" type = "submit" name = "back_to_index" value = "Zurück zu index.html" onclick = "location.href = 'index.html'"/>
+        <input id = "button" type = "submit" name = "back_to_index" value = "Zurück zu index" onclick = "location.href = 'index.html'">
     </body>
 </html>

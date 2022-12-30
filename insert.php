@@ -4,11 +4,8 @@
 
 <?php 
 
+session_start();
 include("functions_collection.php");
-
-$servername = "localhost";
-$username = "root";
-$password = "root";
 
 function extract_post_values(){
     $post_values = array();
@@ -19,8 +16,15 @@ function extract_post_values(){
 }
 
 try {
-    // Establish connection with databse
-    $conn_insert = create_connection($servername, $username, $password, "database_cyrill_ef5");
+    // Check if the user is logged in already
+    if (isset($_SESSION["username"]) && isset($_SESSION["password"])){
+        $username = $_SESSION["username"];
+        $password = $_SESSION["password"];
+    } else{
+        throw new Exception("Sie sind noch nicht eingeloggt!<br>");
+    }
+    // Establish connection with database
+    $conn_insert = create_connection("localhost", $username, $password, "database_cyrill_ef5");
     
     $post_values = extract_post_values();
     // Determine what form was just filled out by the user and then call the appropriate function
@@ -61,6 +65,6 @@ $conn_insert = null;
     </head>
 
     <body style = "background-color:dimgray">
-        <input id = "button" type = "submit" name = "back_to_index" value = "Zurück zu index.html" onclick = "location.href = 'index.html'"/>
+        <input id = "button" type = "submit" name = "back_to_index" value = "Zurück zu index" onclick = "location.href = 'index.html'"/>
     </body>
 </html>
