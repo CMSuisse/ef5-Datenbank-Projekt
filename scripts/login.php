@@ -10,10 +10,11 @@ try{
     if (isset($_SESSION["username"]) && isset($_SESSION["password"])){
         echo "Sie sind bereits eingeloggt!<br>";
         // The error is echoed out because the exception message won't be displayed
-        throw new Exception("User already logged in");
+        throw new Exception();
     }
     $username = $_POST["username"];
     $password = $_POST["password"];
+    unset($_POST);
     // Create a connection as a test to see if an exception is thrown
     $conn = create_connection("localhost", $username, $password, NULL);
     // The PDO connection itself cannot be written to the SESSION variable, so it is no longer needed
@@ -23,7 +24,6 @@ try{
     $_SESSION["username"] = $username;
     $_SESSION["password"] = $password;
 } catch (Exception $e){
-    // REMOVE THE $e->getMessage()!!!! ONLY FOR DEBUGGING!!!
     echo "Das Login war nicht erfolgreich! Überprüfen Sie, ob Sie alle Daten richtig eingegeben haben oder registrieren Sie sich als neuer User!<br>";
 }
 ?>
@@ -35,6 +35,6 @@ try{
     </head>
 
     <body style = "background-color:dimgray">
-        <input id = "button" type = "submit" name = "goto_index" value = "Zu index" onclick = "location.href = 'index.html'">
+        <input id = "button" type = "button" name = "goto_index" value = "Zu index" onclick = "location.href = '../index.php'">
     </body>
 </html>

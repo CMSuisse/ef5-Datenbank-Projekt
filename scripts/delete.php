@@ -48,6 +48,6 @@ $conn_delete = null;
     </head>
 
     <body style = "background-color:dimgray">
-        <input id = "button" type = "submit" name = "back_to_index" value = "Zurück zu index" onclick = "location.href = 'index.html'">
+        <input id = "button" type = "button" name = "back_to_index" value = "Zurück zu index" onclick = "location.href = '../index.php'">
     </body>
 </html>
