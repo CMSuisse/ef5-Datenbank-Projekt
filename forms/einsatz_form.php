@@ -56,3 +56,14 @@
 </html>
 
 <script type = "text/javascript" src = "handle_einsatz_vk_table.js"></script>
+
+<?php
+
+// This little piece of php code is to redirect the user to the login page if no database user is logged in
+session_start();
+include("../scripts/functions_collection.php");
+if (!is_user_logged_in()){
+    redirect_user_to_login();
+}
+
+?>

@@ -21,6 +21,7 @@ try {
         $username = $_SESSION["username"];
         $password = $_SESSION["password"];
     } else{
+        // Theoretically the user should always be logged in at this point because the forms check if the user is logged in but you never know
         throw new Exception("Sie sind noch nicht eingeloggt!<br>");
     }
     // Establish connection with database

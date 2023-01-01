@@ -7,9 +7,9 @@
 
     <body style="background-color:dimgray">
 
-        <h1>MySQL: Login</h1>
+    <h1>Neuer Datenbankbenutzer hinzufügen</h1>
 
-        <form action = "../scripts/login.php" method = "POST">
+        <form action = "../scripts/registration.php" method = "POST">
             <label for = "username">Benutzername</label>
             <br><input type = "text" id = "username" name = "username" maxlength = "100" required>
 
@@ -20,3 +20,14 @@
         </form>
     </body>
 </html>
+
+<?php
+
+// This little piece of php code is to redirect the user to the login page if no database user is logged in
+session_start();
+include("../scripts/functions_collection.php");
+if (!is_user_logged_in()){
+    redirect_user_to_login();
+}
+
+?>

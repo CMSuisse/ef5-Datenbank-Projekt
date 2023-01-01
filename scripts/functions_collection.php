@@ -350,4 +350,18 @@ function add_values_ort($post_values, $conn){
     $insert_ort_values_command -> execute([$post_values[0], $post_values[1], $post_values[2]]);
 }
 
+// These two functions get called by the auftraggeber, einsatz, ort and vk form to redirect a user to the login form if not logged in
+// Without being logged in the user could otherwise fill out the form and submit it, the insert into the database wouldn't work however
+function is_user_logged_in(){
+    if (isset($_SESSION["username"])){
+        return true;
+    } else{
+        return false;
+    }
+}
+
+function redirect_user_to_login(){
+    echo "<script type = 'text/javascript'>window.location.replace('login_form.html')</script>";
+}
+
 ?>

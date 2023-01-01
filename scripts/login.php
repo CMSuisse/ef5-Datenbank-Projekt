@@ -24,7 +24,7 @@ try{
     $_SESSION["username"] = $username;
     $_SESSION["password"] = $password;
 } catch (Exception $e){
-    echo "Das Login war nicht erfolgreich! Überprüfen Sie, ob Sie alle Daten richtig eingegeben haben oder registrieren Sie sich als neuer User!<br>";
+    echo "Das Login war nicht erfolgreich! Überprüfen Sie, ob Sie alle Daten richtig eingegeben haben oder fragen Sie den Admin, ob Sie als neuer Benutzer hinzugefügt werden können!<br>";
 }
 ?>
 
@@ -35,6 +35,6 @@ try{
     </head>
 
     <body style = "background-color:dimgray">
-        <input id = "button" type = "button" name = "goto_index" value = "Zu index" onclick = "location.href = '../index.php'">
+        <input id = "button" type = "button" name = "goto_index" value = "Weiter" onclick = "location.href = '../index.php'">
     </body>
 </html>
