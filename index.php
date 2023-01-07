@@ -10,6 +10,8 @@
         <h2>Cool links</h2>
         <a href = "http://localhost/us_opt1/index.php" target = "_blank">phpMyAdmin</a>
         <br><a href = "https://github.com/CMSuisse/ef5-Datenbank-Projekt" target = "_blank">GitHub repo</a>
+        <!--Hehehehehehehehehehehehehehehehehehehehehehe-->
+        <br><a href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ" target = "_blank">MySQL documentation</a>
 
         <h2>Control panel</h2>
         <input id = "delete_db" type = "button" name = "delete_db" value = "Datenbank löschen" onclick = "location.href = 'scripts/delete.php'">
@@ -23,6 +25,7 @@
         <br><br>
         <input id = "goto_login_form" type = "button" name = "goto_login_form" value = "Log in" onclick = "location.href = 'forms/login_form.html'">
         <input id = "goto_logout" type = "button" name = "goto_logout" value = "Log off" onclick = "location.href = 'scripts/logout.php'">
+        <input id = "goto_registration" type = "button" name = "goto_registration" value = "User registrieren" onclick = "location.href = 'forms/registration_form.php'">
         <br><br>
     </body>
 </html>

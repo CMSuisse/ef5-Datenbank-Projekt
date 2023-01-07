@@ -204,9 +204,9 @@ function create_verbindung_vk_einsatz($post_values, $id_einsatzleiter, $conn){
     }
 
     // Quickly add the verbindung for the Einsatzleiter
-    // lohn is set to 20 instead of 0 which is because the einsatzleiter gets CHF20 on top of everything else for his efforts
+    // lohn is set to 30 instead of 0 which is because the einsatzleiter gets CHF30 on top of everything else for his efforts
     // There can be an additional verbindung for the hours the EL actually worked
-    array_push($verbindung_vk_einsatz_values, [$id_einsatzleiter, 0, $id_einsatz, 20]);
+    array_push($verbindung_vk_einsatz_values, [$id_einsatzleiter, 0, $id_einsatz, 30]);
     
     // Calculate lohn and create the verbindung
     foreach ($verbindung_vk_einsatz_values as $verbindung){

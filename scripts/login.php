@@ -20,7 +20,7 @@ try{
     // The PDO connection itself cannot be written to the SESSION variable, so it is no longer needed
     $conn = null;
     echo "Login erfolgreich! Willkommen $username!<br>";
-    // It isn't secure, it isn't smart but I just can't be fucked to learn more about servers and connections for a database that will never leave localhost. May god forgive my sins and may one never obtain the session-ID
+    // It isn't super secure, it isn't super smart but I just can't be fucked to learn more about servers and connections for a database that will never leave localhost. May god forgive my sins and may one never obtain the session-ID
     $_SESSION["username"] = $username;
     $_SESSION["password"] = $password;
 } catch (Exception $e){

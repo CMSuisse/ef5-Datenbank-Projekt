@@ -14,7 +14,7 @@
             <br><input type = "text" id = "username" name = "username" maxlength = "100" required>
 
             <br><label for = "password">Passwort</label>
-            <br><input type = "password" id = "password" name = "password" maxlength = "100" required>
+            <br><input type = "text" id = "password" name = "password" maxlength = "100" required>
 
             <br><input type = "submit" value = "Absenden">
         </form>

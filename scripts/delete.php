@@ -34,7 +34,7 @@ try{
 
 } catch (Exception $e){
     // Print out the error if one occured
-    echo "Datenbank konnte nicht gelöscht werden: ". $e -> getMessage();
+    echo "Datenbank konnte nicht gelöscht werden: ". $e -> getMessage()."<br>";
 }
 
 // Terminate connection with database
