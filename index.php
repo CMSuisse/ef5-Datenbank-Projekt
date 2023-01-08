@@ -23,7 +23,6 @@
         <input id = "goto_auftraggeber_form" type = "button" name = "goto_auftraggeber_form" value = "Auftraggeber erfassen" onclick = "location.href = 'forms/auftraggeber_form.php'">
         <input id = "goto_ort_form" type = "button" name = "goto_ort_form" value = "Einsatzort erfassen" onclick = "location.href = 'forms/ort_form.php'">
         <br><br>
-        <input id = "goto_login_form" type = "button" name = "goto_login_form" value = "Log in" onclick = "location.href = 'forms/login_form.html'">
         <input id = "goto_logout" type = "button" name = "goto_logout" value = "Log off" onclick = "location.href = 'scripts/logout.php'">
         <input id = "goto_registration" type = "button" name = "goto_registration" value = "User registrieren" onclick = "location.href = 'forms/registration_form.php'">
         <br><br>

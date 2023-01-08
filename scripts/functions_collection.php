@@ -64,7 +64,7 @@ function validate_einsatz_values($post_values, $conn){
         $check_for_vk_command -> execute([$post_values[$i], $post_values[$index_nachname]]);
         $vk_exists = $check_for_vk_command -> fetchColumn();
 
-        // If one of the vks isn't already in the database print out which one and then throw an exception
+        // If one of the vks isn't already in the database throw an exception containing the name of the VK that wasn't found
         if ($vk_exists == 0){
         throw new Exception("Der VK $post_values[$i] $post_values[$index_nachname] wurde nicht in der Datenbank gefunden.
                             Überprüfen Sie, ob Sie den Namen richtig eingegeben haben oder fügen Sie ihn als neuer VK hinzu.");
@@ -120,7 +120,6 @@ function validate_ort_values($post_values, $conn){
 
 // If the form posted was an einsatz_form then this function gets executed
 function add_values_einsatz($post_values, $conn){
-    //print_r($post_values);
     // Before inserting the data, get the ids for the Einsatzort, the Einatzleiter and the Auftraggeber
     // First, select the id of the Einsatzort which in the post_values array is stored at index 3
     $select_id_einsatzort = $conn -> prepare(
@@ -170,6 +169,9 @@ function create_verbindung_vk_einsatz($post_values, $id_einsatzleiter, $conn){
 
     // Data for the vks for whom a verbindung has to be created is stored from index 6 on in post_values
     for ($i = 0; $i < ($len_post_values - 6)/3; $i++){
+        // A Verbindung needs 3 values: id_vk, id_einsatz and zeit_geleistet
+        // The id_einsatz is known and the id_vk can be fetched by knowing the vor- and nachname of the vk 
+        // So this loop creates arrays containing the 3 values vorname_vk, nachname_vk and zeit_geleistet and adds them to the array of all of these 3-value-arrays
         $verbindung_vk_einsatz_value = [];
         for ($j = 0; $j <= 2; $j++){
             array_push($verbindung_vk_einsatz_value, $post_values[6]);
@@ -210,7 +212,6 @@ function create_verbindung_vk_einsatz($post_values, $id_einsatzleiter, $conn){
     
     // Calculate lohn and create the verbindung
     foreach ($verbindung_vk_einsatz_values as $verbindung){
-        $index_verbindung = array_search($verbindung, $verbindung_vk_einsatz_values);
         // First, fetch the id of the rang of the vk in the verbindung
         $fetch_rang_command = $conn -> prepare(
             "SELECT rang_vk FROM database_cyrill_ef5.vks WHERE id_vk = ?;"
@@ -226,14 +227,9 @@ function create_verbindung_vk_einsatz($post_values, $id_einsatzleiter, $conn){
         $stundenlohn_vk_verbindung = $fetch_stundenlohn_command -> fetchColumn();
 
         // Then, multiply stundenlohn and zeit_geleistet together and replace the placeholder with the final value
-        // The + verbindung[3] is to not overwrite the einsatzleiter's lump sum
+        // The + verbindung[3] is to not overwrite the einsatzleiter's CHF30 bonus
         $replacement = [3 => $stundenlohn_vk_verbindung * $verbindung[1] + $verbindung[3]];
         $verbindung = array_replace($verbindung, $replacement);
-
-        // The array verbindung_vk_einsatz_values technically will never be needed again, but...
-        // ANYWAYS!!!
-        $replacement_parent_array = [$index_verbindung => $verbindung];
-        $verbindung_vk_einsatz_values = array_replace($verbindung_vk_einsatz_values, $replacement_parent_array);
         
         // Insert values into verbindung_vk_einsatz_table
         $insert_command = $conn -> prepare(
@@ -266,7 +262,6 @@ function add_values_vk($post_values, $conn){
     $check_if_adresse_exists_command -> execute([$post_values[4], $post_values[5], $post_values[6], $post_values[7]]);
     $adresse_exists = $check_if_adresse_exists_command -> fetchColumn();
     // If the adresse doesn't already exist add it to the database
-    // If it is already in the database, select its id
     if ($adresse_exists == 0){
         $insert_new_adresse_command = $conn -> prepare(
             "INSERT INTO adressen (plz_adresse, stadt_adresse, strasse_adresse, nummer_adresse)
@@ -313,7 +308,6 @@ function add_values_auftraggeber($post_values, $conn){
     $check_if_adresse_exists_command -> execute([$post_values[2], $post_values[3], $post_values[4], $post_values[5]]);
     $adresse_exists = $check_if_adresse_exists_command -> fetchColumn();
     // If the adresse doesn't already exist add it to the database
-    // If it is already in the database, select its id
     if ($adresse_exists == 0){
         $insert_new_adresse_command = $conn -> prepare(
             "INSERT INTO adressen (plz_adresse, stadt_adresse, strasse_adresse, nummer_adresse)
