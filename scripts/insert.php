@@ -26,7 +26,6 @@ try {
     // Establish connection with database
     $conn_insert = create_connection("localhost", $username, $password, "database_cyrill_ef5");
     
-    // I like working with enumerated array keys more than working with string array keys, so this function extracts the values from $_POST and writes them into an enumerated array
     $post_values = extract_post_values();
     // Determine what form was just filled out by the user and then call the appropriate functions
     switch (key($_POST)){

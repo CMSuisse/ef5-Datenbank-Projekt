@@ -31,7 +31,6 @@
             <br><label for = "adresse_strasse_vk">Heimatort VK Strasse</label>
             <br><input type = "text" id = "adresse_strasse_vk" name = "adresse_strasse_vk" maxlength = "100" required>
 
-            <!--The house number isn't a number input field to allow house numbers like 4b-->
             <br><label for = "adresse_hausnummer_vk">Heimatort VK Hausnummer</label>
             <br><input type = "text" id = "adresse_hausnummer_vk" name = "adresse_hausnummer_vk" maxlength = "10" required>
 

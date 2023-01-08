@@ -7,9 +7,10 @@
 session_start();
 include("functions_collection.php");
 
-function delete_database($conn){
+function delete_database(){
+    global $conn_delete;
     // Prepare the command to delete the database
-    $delete_database_command = $conn -> prepare("
+    $delete_database_command = $conn_delete -> prepare("
         DROP DATABASE IF EXISTS database_cyrill_ef5;"
     );
     // Execute the prepared command
@@ -28,8 +29,9 @@ try{
     $conn_delete = create_connection("localhost", $username, $password, "database_cyrill_ef5");
 
     // Try to delete the database
-    delete_database($conn_delete);
+    delete_database();
     echo "Datenbank gelöscht!<br>";
+
 } catch (Exception $e){
     // Print out the error if one occured
     echo "Datenbank konnte nicht gelöscht werden: ". $e -> getMessage()."<br>";

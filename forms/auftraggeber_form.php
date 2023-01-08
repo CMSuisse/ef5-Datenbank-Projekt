@@ -25,7 +25,6 @@
             <br><label for = "adresse_strasse_auftraggeber">Rechnungsadresse Auftraggeber Strasse</label>
             <br><input type = "text" id = "adresse_strasse_auftraggeber" name = "adresse_strasse_auftraggeber" maxlength = "100" required>
 
-            <!--The house number isn't a number input field to allow house numbers like 4b-->
             <br><label for = "adresse_hausnummer_auftraggeber">Rechnungsadresse Auftraggeber Hausnummer</label>
             <br><input type = "text" id = "adresse_hausnummer_auftraggeber" name = "adresse_hausnummer_auftraggeber" maxlength = "10" required>
 

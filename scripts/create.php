@@ -177,6 +177,7 @@ try{
     echo "Tabellen erstellt!<br>";
     add_values_raenge($conn_create, $raenge_values);
     echo "Werte der Ränge-Tabelle hinzugefügt!<br>";
+
 } catch (Exception $e){
     // If this fails print out the error message
     echo "Datenbank konnte nicht erstellt werden: ". $e -> getMessage()."<br>";

@@ -9,7 +9,7 @@ include("functions_collection.php");
 try{
     if (isset($_SESSION["username"]) && isset($_SESSION["password"])){
         echo "Sie sind bereits eingeloggt!<br>";
-        // The error is echoed out because the exception message won't be displayed because in the case of a login attempt that would be stupid
+        // The error is echoed out because the exception message won't be displayed
         throw new Exception();
     }
     $username = $_POST["username"];
