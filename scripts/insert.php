@@ -27,7 +27,7 @@ try {
     $conn_insert = create_connection("localhost", $username, $password, "database_cyrill_ef5");
     
     $post_values = extract_post_values();
-    // Determine what form was just filled out by the user and then call the appropriate function
+    // Determine what form was just filled out by the user and then call the appropriate functions
     switch (key($_POST)){
         case "name_einsatz": 
             validate_einsatz_values($post_values, $conn_insert);
@@ -60,7 +60,7 @@ $conn_insert = null;
 
 <html>
     <head>
-        <meta charset = "utf-8"/>
+        <meta charset = "utf-8">
         <title>MySQL Projekt EF Informatik</title>
     </head>
 

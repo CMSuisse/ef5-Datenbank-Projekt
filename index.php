@@ -1,6 +1,6 @@
 <html>
     <head>
-        <meta charset = "utf-8"/>
+        <meta charset = "utf-8">
         <title>MySQL Projekt EF Informatik</title>
     </head>
 
@@ -10,7 +10,7 @@
         <h2>Cool links</h2>
         <a href = "http://localhost/us_opt1/index.php" target = "_blank">phpMyAdmin</a>
         <br><a href = "https://github.com/CMSuisse/ef5-Datenbank-Projekt" target = "_blank">GitHub repo</a>
-        <!--Hehehehehehehehehehehehehehehehehehehehehehe-->
+        <!--Hehehehehehehehehehehehehehehehehehehehehehe Click it! Do it!-->
         <br><a href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ" target = "_blank">MySQL documentation</a>
 
         <h2>Control panel</h2>

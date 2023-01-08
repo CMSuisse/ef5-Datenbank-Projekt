@@ -16,16 +16,16 @@
             <br><label for = "email_auftraggeber">e-mail Auftraggeber</label>
             <br><input type = "email" id = "email_auftraggeber" name = "email_auftraggeber" maxlength = "100" required>
 
-            <br><label for = "adresse_plz_auftraggeber">Heimatort Auftraggeber PLZ</label>
+            <br><label for = "adresse_plz_auftraggeber">Rechnungsadresse Auftraggeber PLZ</label>
             <br><input type = "number" id = "adresse_plz_auftraggeber" name = "adresse_plz_auftraggeber" min = "1000" max = "9999" required>
 
-            <br><label for = "adresse_ort_auftraggeber">Heimatort Auftraggeber Name</label>
+            <br><label for = "adresse_ort_auftraggeber">Rechnungsadresse Auftraggeber Name</label>
             <br><input type = "text" id = "adresse_ort_auftraggeber" name = "adresse_ort_auftraggeber" maxlength = "100" required>
 
-            <br><label for = "adresse_strasse_auftraggeber">Heimatort Auftraggeber Strasse</label>
+            <br><label for = "adresse_strasse_auftraggeber">Rechnungsadresse Auftraggeber Strasse</label>
             <br><input type = "text" id = "adresse_strasse_auftraggeber" name = "adresse_strasse_auftraggeber" maxlength = "100" required>
 
-            <br><label for = "adresse_hausnummer_auftraggeber">Heimatort Auftraggeber Hausnummer</label>
+            <br><label for = "adresse_hausnummer_auftraggeber">Rechnungsadresse Auftraggeber Hausnummer</label>
             <br><input type = "text" id = "adresse_hausnummer_auftraggeber" name = "adresse_hausnummer_auftraggeber" maxlength = "10" required>
 
             <br><input type = "submit" value = "Absenden">

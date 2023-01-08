@@ -50,7 +50,7 @@ function validate_einsatz_values($post_values, $conn){
 
     // If the Einsatzleiter wasn't found in the database print out this message and throw an exception
     if ($el_exists == 0){
-        throw new Exception("Der angegebene Einsatzleiter konnte nicht in der Datenbank gefunden werden. Überprüfen Sie, 
+        throw new Exception("Der Einsatzleiter $post_values[4] $post_values[5] konnte nicht in der Datenbank gefunden werden. Überprüfen Sie, 
                             ob Sie den Namen richtig eingegeben haben oder fügen Sie ihn als neuer VK hinzu.");
     }
 
@@ -83,7 +83,7 @@ function validate_auftraggeber_values($post_values, $conn){
     
     // If the auftraggeber does already exist throw an exception
     if ($auftraggeber_exists == 1){
-        throw new Exception("Dieser Auftraggeber ist bereits in der Datenbank vorhanden.");
+        throw new Exception("Der Auftraggeber $post_values[0] ist bereits in der Datenbank vorhanden.");
     }
 }
 
@@ -165,12 +165,12 @@ function create_verbindung_vk_einsatz($post_values, $id_einsatzleiter, $conn){
     $select_id_einsatz -> execute([$post_values[0], $post_values[1]]);
     $id_einsatz = $select_id_einsatz -> fetchColumn();
 
-    $verbindung_vk_einsatz_values = array();
+    $verbindung_vk_einsatz_values = [];
     $len_post_values = count($post_values);
 
     // Data for the vks for whom a verbindung has to be created is stored from index 6 on in post_values
     for ($i = 0; $i < ($len_post_values - 6)/3; $i++){
-        $verbindung_vk_einsatz_value = array();
+        $verbindung_vk_einsatz_value = [];
         for ($j = 0; $j <= 2; $j++){
             array_push($verbindung_vk_einsatz_value, $post_values[6]);
             // After having written the value to the new array delete it in post_values

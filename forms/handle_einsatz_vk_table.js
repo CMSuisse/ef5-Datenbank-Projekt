@@ -48,14 +48,14 @@ function addRowToTable()
 
   cellNachnameVK.appendChild(el);
 
-  // einastzstunden vk cell label
+  // einsastzstunden vk cell label
   var cellEInsatzstundenVKLabel = row.insertCell(5);
   var el = document.createElement('label');
   el.for = 'vk_einsatzstunden_einsatz' + iteration;
   cellEInsatzstundenVKLabel.innerHTML = 'Einsatzstunden VK';
   cellEInsatzstundenVKLabel.appendChild(el);
 
-  // einastzstunden vk cell
+  // einsastzstunden vk cell
   var cellEInsatzstundenVK = row.insertCell(6);
   var el = document.createElement('input');
   el.type = 'number';
