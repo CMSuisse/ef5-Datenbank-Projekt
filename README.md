@@ -7,3 +7,5 @@ A database with rudimentary UI that could theoretically be used by the traffic w
 - If a user is not logged in the webpage will redirect to the login form
 - Currently, a user cannot modify or delete entries via the webpage except for deleting the database entirely
 - Modify and delete functionalities coming soon (-ish)
+
+5.75 noice
